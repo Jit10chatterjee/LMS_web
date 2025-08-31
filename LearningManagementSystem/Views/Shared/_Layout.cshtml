@@ -1,0 +1,128 @@
+﻿@{ 
+    var UserId = Context.Session.GetInt32("UserId");
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LearningManagementSystem</title>
+
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+
+    <!-- Template Stylesheet -->
+    <link href="css/custom-style.css" rel="stylesheet">
+    @*<link href="~/css/Profile.css" rel="stylesheet">*@
+
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/custom-bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/CustomJs/NavFunctionality.js/NavFunctionality.js"></script>
+
+
+</head>
+<body>
+    @*<div class="container">
+        <main role="main" class="pb-3">*@
+    @*<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-wrapper position-relative d-flex align-items-center justify-content-center">
+                 Spinner
+                <div class="spinner-border text-primary" style="width: 5rem; height: 5rem;" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+
+                 Website Name
+                <span class="spinner-text position-absolute fw-bold text-success">
+                    Edesphere
+                </span>
+            </div>
+        </div>*@
+    @*Navbar Start*@
+    <header class="w-full bg-white shadow-md">
+        <!-- Navbar content -->
+        <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+            <a asp-controller="LandingPage" asp-action="LandingPage" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+                <img src="~/img/webinar.png" style="height:40px; width:auto;" />
+                <h2 class="m-1 text-primary">Edesphere</h2>
+            </a>
+
+            <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <form class="d-flex mx-auto" role="search">
+                    <div class="input-group">
+                        <input class="form-control rounded-pill px-3" type="search"
+                               placeholder="What do you want to learn?" aria-label="Search" style="min-width: 450px;">
+                        <button class="btn btn-primary rounded-circle ms-2" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="dropdown position-static">
+                    <a class="nav-link" href="#" id="UserProfileSection" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg"
+                             width="35" height="35" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="UserProfileSection">
+                        <li style="font-size:15px;"><a class="dropdown-item text-primary" asp-controller="Profile" asp-action="GetProfile" asp-route-UserId="@UserId">
+                            <i class="fas fa-user"></i>&nbsp;Dashboard</a></li>
+                        <li style="font-size:15px;"><a class="dropdown-item text-primary" href="#"><i class="fas fa-pen"></i>&nbsp; Profile</a></li>
+                        <li style="font-size:15px;"><a class="dropdown-item text-primary " href="#"><i class="fas fa-book-reader"></i>&nbsp;My Courses</a></li>
+                        <li style="font-size:15px;"><a class="dropdown-item" id="LogOut" asp-controller="LandingPage" asp-action="LogOut">Log Out&nbsp;&nbsp;&nbsp; <i class="fas fa-sign-out-alt"></i></a></li>
+                    </ul>
+                </div>
+
+                <a href="contact.html" class="nav-item nav-link me-4 fw-semibold">Help Center</a>
+
+                <a type="button" class="btn btn-primary py-2 px-4 d-lg-block" id="JoinHere">
+                    Join Now<i class="fa fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    @*Navbar End*@
+    @RenderBody()
+    @*</main>*@
+    @*</div>*@
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- MDB -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/9.1.0/mdb.umd.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
