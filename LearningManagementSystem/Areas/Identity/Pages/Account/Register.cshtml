@@ -5,126 +5,173 @@
     Layout = null;
 }
 
-@*<h1>@ViewData["Title"]</h1>*@
-
-
 <!-- Font Awesome -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-      rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
 <!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-      rel="stylesheet" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/9.1.0/mdb.min.css"
-      rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+<!-- MDB -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/9.1.0/mdb.min.css" rel="stylesheet" />
 
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+
 <style>
-    /* Keep layout same, just scale down */
-    .card-registration {
-        transform: scale(0.85); /* scale down to 85% */
-        transform-origin: top center; /* scale from top */
+    body {
+        background-color: #f8f9fa;
     }
-    /* Keep layout same, just scale down */
-    .col {
-        transform: scale(0.85); /* scale down to 85% */
-        transform-origin: top center; /* scale from top */
+
+    .card-registration {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-label {
+        font-weight: 500;
+    }
+
+    .btn-warning {
+        background-color: #f5b400;
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a200;
+    }
+
+    .btn-light {
+        font-weight: 600;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+    }
+
+    h3 {
+        font-weight: 700;
+    }
+
+    /* Responsive */
+    @@media(max-width: 992px) {
+        .card-registration {
+            transform: scale(1);
+        }
     }
 </style>
 
 <section class="h-100">
-    <div class="container">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col">
-                <div class="card card-registration my-4">
+    <div class="container py-5">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-10">
+                <div class="card card-registration">
                     <div class="row g-0">
-                        <div class="col-xl-5 d-none d-xl-block">
+                        <!-- Left image -->
+                        <div class="col-lg-5 d-none d-lg-block">
                             <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp"
-                                 alt="Sample photo" class="img-fluid"
-                                 style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
+                                 alt="Registration image" class="img-fluid h-100"
+                                 style="object-fit: cover;" />
                         </div>
-                        <div class="col-xl-7">
-                            <div class="card-body p-md-5 text-black">
-                                <h3 class="mb-5 text-uppercase">Create account</h3>
+
+                        <!-- Right form -->
+                        <div class="col-lg-7">
+                            <div class="card-body p-5 text-black">
+                                <h3 class="mb-4 text-uppercase">Create Account To
+                                <img src="~/img/webinar.png" style="height:40px; width:auto;" /> 
+                                <span class="m-1">Edesphere</span> </h3>
 
                                 <form method="post">
-                                    @* Full Name *@
-                                    <div data-mdb-input-init class="form-outline mb-2">
-                                        <input asp-for="Input.FullName" class="form-control form-control-lg" />
-                                        <label class="form-label" asp-for="Input.FullName">Full Name</label>
-                                        <span asp-validation-for="Input.FullName" class="text-danger"></span>
+                                    <!-- Full Name -->
+                                    <div class="mb-3">
+                                        <label asp-for="Input.FullName" class="form-label">Full Name <span class="text-danger">*</span></label>
+                                        <input asp-for="Input.FullName" class="form-control" />
+                                        <span asp-validation-for="Input.FullName" class="text-danger small"></span>
                                     </div>
 
-                                    @* Age *@
-                                    <div data-mdb-input-init class="form-outline mb-2">
-                                        <input asp-for="Input.Age" type="number" class="form-control form-control-lg" />
-                                        <label class="form-label" asp-for="Input.Age">Age</label>
-                                        <span asp-validation-for="Input.Age" class="text-danger"></span>
-                                    </div>
-
-                                    @* Gender Radio Buttons *@
-                                    <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
-                                        <h6 class="mb-0 me-4">Gender: </h6>
-                                        <div class="form-check form-check-inline mb-0 me-4">
-                                            <input asp-for="Input.Gender" class="form-check-input" type="radio" value="Female" />
-                                            <label class="form-check-label">Female</label>
+                                    <!-- Age & Gender -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label asp-for="Input.Age" class="form-label">Age</label>
+                                            <input asp-for="Input.Age" type="number" class="form-control" />
+                                            <span asp-validation-for="Input.Age" class="text-danger small"></span>
                                         </div>
-                                        <div class="form-check form-check-inline mb-0 me-4">
-                                            <input asp-for="Input.Gender" class="form-check-input" type="radio" value="Male" />
-                                            <label class="form-check-label">Male</label>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Gender <span class="text-danger">*</span></label>
+                                            <div class="d-flex gap-3 mt-2">
+                                                <div class="form-check">
+                                                    <input asp-for="Input.Gender" class="form-check-input" type="radio" value="Female" id="female" />
+                                                    <label class="form-check-label" for="female">Female</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input asp-for="Input.Gender" class="form-check-input" type="radio" value="Male" id="male" />
+                                                    <label class="form-check-label" for="male">Male</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input asp-for="Input.Gender" class="form-check-input" type="radio" value="Other" id="other" />
+                                                    <label class="form-check-label" for="other">Other</label>
+                                                </div>
+                                            </div>
+                                            <span asp-validation-for="Input.Gender" class="text-danger small"></span>
                                         </div>
-                                        <div class="form-check form-check-inline mb-0">
-                                            <input asp-for="Input.Gender" class="form-check-input" type="radio" value="Other" />
-                                            <label class="form-check-label">Other</label>
+                                    </div>
+
+                                    <!-- DOB & Contact -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label asp-for="Input.DateOfBirth" class="form-label">Date of Birth <span class="text-danger">*</span></label>
+                                            <input asp-for="Input.DateOfBirth" type="text" class="form-control" id="datepicker" placeholder="DD/MM/YYYY" />
+                                            <span asp-validation-for="Input.DateOfBirth" class="text-danger small"></span>
                                         </div>
-                                        <span asp-validation-for="Input.Gender" class="text-danger"></span>
+                                        <div class="col-md-6">
+                                            <label asp-for="Input.Contact" class="form-label">Contact <span class="text-danger">*</span></label>
+                                            <input asp-for="Input.Contact" type="text" class="form-control" />
+                                            <span asp-validation-for="Input.Contact" class="text-danger small"></span>
+                                        </div>
                                     </div>
 
-                                    @* Date of Birth *@
-                                    <div class="form-group mb-2">
-                                        <label class="form-label" asp-for="Input.DateOfBirth">Date of Birth</label>
-                                        <input asp-for="Input.DateOfBirth" placeholder="DD/MM/YYYY" type="text" class="form-control form-control-lg" id="datepicker" />
-                                        <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+                                    <!-- Email -->
+                                    <div class="mb-3">
+                                        <label asp-for="Input.Email" class="form-label">Email <span class="text-danger">*</span></label>
+                                        <input asp-for="Input.Email" type="email" class="form-control" />
+                                        <span asp-validation-for="Input.Email" class="text-danger small"></span>
                                     </div>
 
-                                    @* Contact *@
-                                    <div data-mdb-input-init class="form-outline mb-2">
-                                        <input asp-for="Input.Contact" type="text" class="form-control form-control-lg" />
-                                        <label class="form-label" asp-for="Input.Contact">Contact</label>
-                                        <span asp-validation-for="Input.Contact" class="text-danger"></span>
+                                    <!-- Password -->
+                                    <div class="mb-3">
+                                        <label asp-for="Input.Password" class="form-label">Password <span class="text-danger">*</span></label>
+                                        <input asp-for="Input.Password" type="password" class="form-control" />
+                                        <span asp-validation-for="Input.Password" class="text-danger small"></span>
                                     </div>
 
-                                    @* Email *@
-                                    <div data-mdb-input-init class="form-outline mb-2">
-                                        <input asp-for="Input.Email" type="email" class="form-control form-control-lg" />
-                                        <label class="form-label" asp-for="Input.Email">Email</label>
-                                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                    <!-- Confirm Password -->
+                                    <div class="mb-4">
+                                        <label asp-for="Input.ConfirmPassword" class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                                        <input asp-for="Input.ConfirmPassword" type="password" class="form-control" />
+                                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger small"></span>
                                     </div>
 
-                                    @* Password *@
-                                    <div data-mdb-input-init class="form-outline mb-2">
-                                        <input asp-for="Input.Password" type="password" class="form-control form-control-lg" />
-                                        <label class="form-label" asp-for="Input.Password">Password</label>
-                                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                                    </div>
-
-                                    @* Confirm Password *@
-                                    <div data-mdb-input-init class="form-outline mb-2">
-                                        <input asp-for="Input.ConfirmPassword" type="password" class="form-control form-control-lg" />
-                                        <label class="form-label" asp-for="Input.ConfirmPassword">Confirm Password</label>
-                                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                                    </div>
-
-                                    @* Submit & Reset Buttons *@
-                                    <div class="d-flex justify-content-end pt-3">
-                                        <button type="reset" class="btn btn-light btn-lg">Reset all</button>
-                                        <button type="submit" class="btn btn-warning btn-lg ms-2">Submit form</button>
+                                    <!-- Buttons -->
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <button type="button" class="btn btn-info btn-lg px-4" onclick="window.location.href = '@Url.Page("/Account/Login")'">
+                                            BACK
+                                        </button>
+                                        <button type="reset" class="btn btn-light btn-lg px-4"
+                                                onclick="window.location.href='@Url.Page("/Account/Register")'">
+                                            RESET
+                                        </button>
+                                        <button type="submit" class="btn btn-warning btn-lg px-4">
+                                            SUBMIT
+                                        </button>
                                     </div>
                                 </form>
 
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div> <!-- row -->
+                </div> <!-- card -->
             </div>
         </div>
     </div>
@@ -138,9 +185,20 @@
         $(function () {
             $("#datepicker").datepicker({
                 changeMonth: true,
-                changeYear: true
+                changeYear: true,
+                yearRange: "1900:2025",
+                dateFormat: "dd/mm/yy"
             });
+        });
+
+        $("button[type='reset']").on("click", function (e) {
+            e.preventDefault();
+            const form = $(this).closest("form");
+            form.find("input").val("");
+            form.find(".text-danger").text("");
+            form.find(".validation-summary-errors").empty();
+            form.find(".input-validation-error").removeClass("input-validation-error");
+            $("#datepicker").datepicker("setDate", null);
         });
     </script>
 }
-
