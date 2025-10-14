@@ -147,6 +147,7 @@ namespace LearningManagementSystem.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                
                 var user = new LMSUser
                 {
                     UserName = Input.Email,
@@ -232,7 +233,7 @@ namespace LearningManagementSystem.Areas.Identity.Pages.Account
             return (IUserEmailStore<LMSUser>)_userStore;
         }
 
-        private Tuple<int,string> SaveUserDetails(string LMSUserId)
+        public Tuple<int,string> SaveUserDetails(string LMSUserId)
         {
             int oid = 0;
             string msg = "";

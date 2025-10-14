@@ -601,3 +601,16 @@ END
 
 
 GO
+
+
+
+--- 14/10/2025 --- AMRITA
+ALTER proc lmsGetAllMasterCourse
+as
+begin
+	SELECT
+		[CourseMasterId]
+		,[CourseMasterType]
+	FROM CourseMaster
+end
+

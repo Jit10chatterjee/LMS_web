@@ -72,4 +72,20 @@ namespace LearningManagementSystem.Models
         public string? Description { get; set; }
         public DateTime? ModifiedOn { get; set; }
     }
+
+
+    #region POULAMI
+
+
+
+
+
+
+
+
+
+
+
+
+    #endregion
 }
