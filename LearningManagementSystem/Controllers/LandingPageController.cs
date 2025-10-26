@@ -17,7 +17,7 @@ namespace LearningManagementSystem.Controllers
         private readonly ILogger<LandingPageController> _logger;
         public LandingPageController
             (SignInManager<LMSUser> signInManager
-            ,IConfiguration configuration,
+            , IConfiguration configuration,
              ILogger<LandingPageController> logger
             )
         {
@@ -55,7 +55,7 @@ namespace LearningManagementSystem.Controllers
         [HttpGet]
         public IActionResult IsUserLoggedIn()
         {
-            if(User.Identity != null && User.Identity.IsAuthenticated)
+            if (User.Identity != null && User.Identity.IsAuthenticated)
             {
                 return Json(new { loggedIn = true });
             }
@@ -66,7 +66,7 @@ namespace LearningManagementSystem.Controllers
         {
             try
             {
-                DataTable dt = new DataTable(); 
+                DataTable dt = new DataTable();
                 if (email != null && email != "")
                 {
                     using (SqlConnection con = new SqlConnection(_connectionString))
@@ -91,6 +91,13 @@ namespace LearningManagementSystem.Controllers
                 _logger.LogError(ex, "Unexpected error in GetUserDataByEmail for email: {Email}", email);
                 throw;
             }
+
+
+        }
+
+        public void GetAllMastersCourse()
+        {
+            
         }
     }
 }
