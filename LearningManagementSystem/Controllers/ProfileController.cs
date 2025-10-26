@@ -113,5 +113,11 @@ namespace LearningManagementSystem.Controllers
             //System.IO.File.WriteAllText("C:\\Temp\\userProfile.txt", JsonConvert.SerializeObject(userProfile, Formatting.Indented));
             return View(userProfile);
         }
+
+        [HttpGet]
+        public IActionResult SaveProfileDetails()
+        {
+            return View();
+        }
     }
 }

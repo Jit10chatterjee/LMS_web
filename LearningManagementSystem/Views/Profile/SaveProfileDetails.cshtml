@@ -1,0 +1,183 @@
+﻿<!-- Profile Update Form Start -->
+<div class="container-fluid" data-wow-delay="0.1s">
+    <div class="container py-5">
+        <form>
+            <div class="row g-3">
+                <!-- Section: Profile Information -->
+                <h5 class="mb-3">Profile Information</h5>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="name" placeholder="Name">
+                        <label for="name">Name</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="contact" placeholder="Contact">
+                        <label for="contact">Contact</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="email" class="form-control" id="email" placeholder="Email">
+                        <label for="email">Email</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="number" class="form-control" id="age" placeholder="Age">
+                        <label for="age">Age</label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="About" id="about"
+                                  style="height: 100px"></textarea>
+                        <label for="about">About</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="country" placeholder="Country">
+                        <label for="country">Country</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="state" placeholder="State">
+                        <label for="state">State</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="pincode" placeholder="Pin Code">
+                        <label for="pincode">Pin Code</label>
+                    </div>
+                </div>
+
+
+                <!-- Section: Educational Background -->
+                <div class="col-12">
+                    <button class="btn btn-outline-primary py-2 px-4" type="button">+ Add</button>
+                </div>
+                <h5 class="mt-4 mb-3">Educational Background</h5>
+                <div id="education-container">
+                    <div class="education-block row g-3 mb-3 border rounded p-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="Degree" placeholder="Degree">
+                                <label>Degree</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="CollegeName"
+                                       placeholder="College Name">
+                                <label>College Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="date" class="form-control" name="StartDate" placeholder="Start Date">
+                                <label>Start Date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="date" class="form-control" name="EndDate" placeholder="End Date">
+                                <label>End Date</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="CurrentlyPursuing">
+                                <label class="form-check-label">Currently Pursuing</label>
+                            </div>
+                        </div>
+                        <div class="col-12 text-end">
+                            <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Section: Educational Background -->
+                <div class="col-12">
+                    <button class="btn btn-outline-primary py-2 px-4" type="button">+ Add</button>
+                </div>
+                <h5 class="mt-4 mb-3">Professional Experience</h5>
+                <div id="experience-container">
+                    <div class="education-block row g-3 mb-3 border rounded p-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="Organization"
+                                       placeholder="Enter organization name">
+                                <label>Organization</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="Designation"
+                                       placeholder="Enter your designation">
+                                <label>Your Designation</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="date" class="form-control" name="doj" placeholder="DD/MM/YYYY">
+                                <label>Date Of Joining</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="date" class="form-control" name="dor" placeholder="DD/MM/YYYY">
+                                <label>Last Working Date</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="CurrentlyWorking">
+                                <label class="form-check-label">Currently Working</label>
+                            </div>
+                        </div>
+                        <div class="col-12 text-end">
+                            <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Interests and Hobbies -->
+                <h5 class="mt-4 mb-3">Interests and Hobbies</h5>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" id="interest">
+                            <option selected disabled>Choose...</option>
+                            <option value="AI">AI</option>
+                            <option value="Web Development">Web Development</option>
+                            <option value="Data Science">Data Science</option>
+                        </select>
+                        <label for="interest">Area of Interest</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select class="form-select" id="hobbies">
+                            <option selected disabled>Choose...</option>
+                            <option value="Reading">Reading</option>
+                            <option value="Gaming">Gaming</option>
+                            <option value="Traveling">Traveling</option>
+                        </select>
+                        <label for="hobbies">Hobbies</label>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="col-12 d-flex justify-content-between mt-4">
+                    <button class="btn btn-outline-secondary px-4 py-2" type="reset">Cancel</button>
+                    <button class="btn btn-primary px-4 py-2" type="submit">Save Changes</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
