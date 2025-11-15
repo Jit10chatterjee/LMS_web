@@ -107,6 +107,7 @@ namespace LearningManagementSystem.Controllers
                         }
                     }
                 }
+
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Oops something went wrong!!");
