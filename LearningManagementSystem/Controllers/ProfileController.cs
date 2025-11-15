@@ -1,10 +1,13 @@
 ﻿using LearningManagementSystem.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
+using Microsoft.Exchange.WebServices.Data;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Newtonsoft.Json;
 using System.Data;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace LearningManagementSystem.Controllers
 {
@@ -30,7 +33,7 @@ namespace LearningManagementSystem.Controllers
         {
             Console.WriteLine(HttpContext.Session.GetInt32("UserId"));
             UserProfile userProfile = new UserProfile();
-            if(UserId != 0)
+            if (UserId != 0)
             {
                 try
                 {
@@ -45,9 +48,9 @@ namespace LearningManagementSystem.Controllers
                         SqlDataAdapter da = new SqlDataAdapter(command);
                         da.Fill(ds);
                     }
-                    if ( ds!= null && ds.Tables.Count > 0)
+                    if (ds != null && ds.Tables.Count > 0)
                     {
-                        if(ds.Tables[0].Rows.Count > 0)
+                        if (ds.Tables[0].Rows.Count > 0)
                         {
                             userProfile.UserId = Convert.ToInt32(ds.Tables[0].Rows[0]["UserId"]);
                             userProfile.UserName = (ds.Tables[0].Rows[0]["FullName"]).ToString() ?? "";
@@ -62,7 +65,7 @@ namespace LearningManagementSystem.Controllers
                                 UserEducationDetails Edetails = new UserEducationDetails();
                                 Edetails.Degree = (ds.Tables[1].Rows[i]["Degree"]).ToString() ?? "";
                                 Edetails.NameOftheInstitution = (ds.Tables[1].Rows[i]["NameOftheInstitution"]).ToString() ?? "";
-                                Edetails.IsYearGap = Convert.ToBoolean(ds.Tables[1].Rows[i]["IsYearGap"]);                               
+                                Edetails.IsYearGap = Convert.ToBoolean(ds.Tables[1].Rows[i]["IsYearGap"]);
 
                                 userEducationDetails.Add(Edetails);
                             }
@@ -106,7 +109,7 @@ namespace LearningManagementSystem.Controllers
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex,"Oops something went wrong!!");
+                    _logger.LogError(ex, "Oops something went wrong!!");
                     throw;
                 }
             }
