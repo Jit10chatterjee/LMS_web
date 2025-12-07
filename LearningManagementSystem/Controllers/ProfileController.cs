@@ -272,22 +272,24 @@ namespace LearningManagementSystem.Controllers
 
                         if (experienceList.Count > 0)
                         {
-                            for (int j = 1; j < educationList.Count; j++)
+                            for (int j = 1; j < experienceList.Count; j++)
                             {
 
                                 using (SqlCommand expCmd = conn.CreateCommand())
                                 {
                                     SqlTransaction sqlTrans = conn.BeginTransaction();
-                                    //expCmd.CommandType = CommandType.StoredProcedure;
-                                    //expCmd.Transaction = sqlTrans;
-                                    //expCmd.CommandText = "lmsUserExperienceSave"; // create this SP in DB
+                                    expCmd.CommandType = CommandType.StoredProcedure;
+                                    expCmd.Transaction = sqlTrans;
+                                    expCmd.CommandText = "lmsUserExperienceSave"; // create this SP in DB
 
-                                    //expCmd.Parameters.AddWithValue("@IUserProfileId", profileId);
-                                    //expCmd.Parameters.AddWithValue("@ICompanyName", (object?)exp.CompanyName ?? DBNull.Value);
-                                    //expCmd.Parameters.AddWithValue("@IDesignation", (object?)exp.Designation ?? DBNull.Value);
-                                    //expCmd.Parameters.AddWithValue("@IDateOfJoining", (object?)exp.DateOfJoining ?? DBNull.Value);
-                                    //expCmd.Parameters.AddWithValue("@ILastWorkingDay", (object?)exp.LastWorkingDay ?? DBNull.Value);
-                                    //expCmd.Parameters.AddWithValue("@IIsCurrentCompany", exp.IsCurrentCompany);
+                                    expCmd.Parameters.AddWithValue("@IUserProfileId", profileId);
+                                    expCmd.Parameters.AddWithValue("@ICompanyName", experienceList[j].CompanyName);
+                                    expCmd.Parameters.AddWithValue("@IDesignation", experienceList[j].Designation);
+                                    expCmd.Parameters.AddWithValue("@IDateOfJoining", experienceList[j].DateOfJoing);
+                                    expCmd.Parameters.AddWithValue("@ILastWorkingDay", experienceList[j].LastWorkingDay);
+                                    expCmd.Parameters.AddWithValue("@IIsCurrentCompany", experienceList[j].IsCurrentCompany);
+
+                                    expCmd.ExecuteNonQuery();
                                 }
                             }
                         }
@@ -295,7 +297,7 @@ namespace LearningManagementSystem.Controllers
                 }
 
                 TempData["SuccessMessage"] = "Profile updated successfully!";
-                return RedirectToAction("Index"); // or GetProfile with userId
+                return RedirectToAction("GetProfile"); // or GetProfile with userId
             }
             catch (Exception ex)
             {

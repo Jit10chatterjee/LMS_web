@@ -51,5 +51,33 @@ namespace LearningManagementSystem.Models
         public List<CourseInfo>  popularOrDemandingCourseList { get; set; }
     }
 
+    public class CourseSpecialization
+    {
+        public int SpecializationId { get; set; }
+        public string Specialization { get; set; }
+    }
+
+    public class RelatedCourses
+    {
+        public int CourseDetailsId { get; set; }
+        public string CourseName { get; set; }
+        public string CourseImage { get; set; }
+        public string CourseProvider { get; set; }
+
+    }
+
+    public class CourseDetailsByID
+    {
+        public int CourseDetailsId { get; set; }
+        public string CourseName { get; set; }
+        public string CourseProvider { get; set; }
+        public bool IsFree { get; set; }
+        public decimal CourseFees { get; set; }
+
+        public List<Skills> Skills { get; set; }
+        public List<CourseSpecialization> CourseSpecializationList { get; set; }
+
+        public List<RelatedCourses> RelatedCourses { get; set; }
+    }
 
 }

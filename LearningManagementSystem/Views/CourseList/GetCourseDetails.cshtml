@@ -1,12 +1,16 @@
 ﻿@* Python Specialization Section *@
+
+@model LearningManagementSystem.Models.CourseDetailsByID
+
+
 <div class="container-xxl py-5">
     <div class="container">
         <!-- Header -->
         <div class="text-center mb-5">
             <h6 class="section-title bg-white text-primary d-inline-block px-3">Specialization</h6>
-            <h1 class="fw-bold mt-3">Python for Everybody Specialization</h1>
+            <h1 class="fw-bold mt-3">@Model.CourseName</h1>
             <p class="text-muted">
-                Learn to Program and Analyze Data with Python. Develop programs to gather, clean, analyze, and visualize data.
+                Excell your knowledge and ehance your skills with this amazing course
             </p>
         </div>
 
@@ -20,7 +24,7 @@
                         M
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0 text-primary fw-bold">University of Michigan</h6>
+                        <h6 class="mb-0 text-primary fw-bold">@Model.CourseProvider</h6>
                         <small class="text-muted">Instructor: <strong>Charles Russell Severance</strong></small>
                     </div>
                 </div>
@@ -34,25 +38,25 @@
 
                 <h5 class="fw-bold mt-4 mb-3">Skills you'll gain</h5>
                 <div class="d-flex flex-wrap gap-2">
-                    <span class="badge bg-light text-dark border">Databases</span>
-                    <span class="badge bg-light text-dark border">Data Processing</span>
-                    <span class="badge bg-light text-dark border">Data Store</span>
-                    <span class="badge bg-light text-dark border">Data Structures</span>
-                    <span class="badge bg-light text-dark border">Web Services</span>
-                    <span class="badge bg-light text-dark border">Network Protocols</span>
-                    <span class="badge bg-light text-dark border">Data Visualization</span>
-                    <span class="badge bg-light text-dark border">Web Scraping</span>
-                    <span class="badge bg-light text-dark border">Database Design</span>
-                    <span class="badge bg-light text-dark border">Programming Principles</span>
-                    <span class="badge bg-light text-dark border">Data Modeling</span>
-                    <span class="badge bg-light text-dark border">SQL</span>
+                    @foreach (var skill in Model.Skills)
+                    {
+                        <span class="badge bg-light text-dark border">@skill.SkillName</span>
+                    }
+                </div>
+
+                <h5 class="fw-bold mt-4 mb-3">Specialization of @Model.CourseName</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach (var skill in Model.CourseSpecializationList)
+                    {
+                        <span class="badge bg-light text-dark border">@skill.Specialization</span>
+                    }
                 </div>
             </div>
 
             <!-- Right Info Card -->
             <div class="col-lg-4 col-md-5">
                 <div class="bg-light border rounded-3 shadow-sm p-4">
-                    <h5 class="fw-bold text-primary mb-3">Specialization Details</h5>
+                    <h5 class="fw-bold text-primary mb-3"> Details</h5>
                     <ul class="list-unstyled mb-4">
                         <li class="mb-2">
                             <strong>5 course series</strong> <br>
@@ -85,71 +89,91 @@
                 </div>
             </div>
         </div>
+        <style>
+            /* Outer container scroll */
+            .related-scroll {
+                display: flex;
+                overflow-x: auto;
+                gap: 20px;
+                padding-bottom: 10px;
+                scroll-behavior: smooth;
+            }
 
-        <!-- Related Courses -->
+                /* Hide scrollbar (optional) */
+                .related-scroll::-webkit-scrollbar {
+                    height: 6px;
+                }
+
+                .related-scroll::-webkit-scrollbar-thumb {
+                    background: #ccc;
+                    border-radius: 4px;
+                }
+
+            /* Fixed card size */
+            .related-card {
+                width: 210px;
+                flex: 0 0 auto;
+                height: 330px;
+                border: 1px solid #eee;
+                border-radius: 10px;
+                overflow: hidden;
+                background: white;
+            }
+
+                /* Fixed image size */
+                .related-card img {
+                    height: 140px;
+                    width: 100%;
+                    object-fit: cover;
+                }
+
+                /* Body area aligned */
+                .related-card .card-body {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    height: calc(330px - 140px);
+                    padding: 12px;
+                }
+
+            .card-title {
+                min-height: 38px; /* Keep title lines aligned */
+                font-size: 15px;
+            }
+        </style>
+
+
         <div class="mt-5">
             <h4 class="fw-bold mb-3">Related Courses</h4>
-            <div class="d-flex flex-nowrap overflow-auto pb-2">
 
-                <div class="card me-3 shadow-sm" style="min-width: 250px;">
-                    <img src="~/img/course-1.jpg" class="card-img-top" alt="Course 1">
-                    <div class="card-body">
-                        <h6 class="card-title fw-semibold text-truncate">Python Data Structures</h6>
-                        <p class="text-muted small mb-2">University of Michigan</p>
-                        <a href="#" class="btn btn-sm btn-outline-primary rounded-pill">View Course</a>
-                    </div>
-                </div>
+            <div class="related-scroll">
 
-                <div class="card me-3 shadow-sm" style="min-width: 250px;">
-                    <img src="/images/course2.jpg" class="card-img-top" alt="Course 2">
-                    <div class="card-body">
-                        <h6 class="card-title fw-semibold text-truncate">Using Python to Access Web Data</h6>
-                        <p class="text-muted small mb-2">University of Michigan</p>
-                        <a href="#" class="btn btn-sm btn-outline-primary rounded-pill">View Course</a>
-                    </div>
-                </div>
+                @foreach (var rtl in Model.RelatedCourses)
+                {
+                    <div class="card related-card shadow-sm">
+                        <img src="@rtl.CourseImage" class="card-img-top" alt="Course Image" />
 
-                <div class="card me-3 shadow-sm" style="min-width: 250px;">
-                    <img src="/images/course3.jpg" class="card-img-top" alt="Course 3">
-                    <div class="card-body">
-                        <h6 class="card-title fw-semibold text-truncate">Python Classes and Objects</h6>
-                        <p class="text-muted small mb-2">University of Michigan</p>
-                        <a href="#" class="btn btn-sm btn-outline-primary rounded-pill">View Course</a>
-                    </div>
-                </div>
+                        <div class="card-body">
+                            <div>
+                                <h6 class="card-title fw-semibold text-truncate">@rtl.CourseName</h6>
+                                <p class="text-muted small mb-2">@rtl.CourseProvider</p>
+                            </div>
 
-                <div class="card me-3 shadow-sm" style="min-width: 250px;">
-                    <img src="/images/course4.jpg" class="card-img-top" alt="Course 4">
-                    <div class="card-body">
-                        <h6 class="card-title fw-semibold text-truncate">Capstone: Retrieving, Processing, and Visualizing Data</h6>
-                        <p class="text-muted small mb-2">University of Michigan</p>
-                        <a href="#" class="btn btn-sm btn-outline-primary rounded-pill">View Course</a>
+                            <a class="btn btn-sm btn-outline-primary rounded-pill mt-auto"
+                               asp-controller="CourseList"
+                               asp-action="GetCourseDetails"
+                               asp-route-id="@rtl.CourseDetailsId">
+                                View Course
+                            </a>
+                        </div>
+
                     </div>
-                </div>
-                <div class="card me-3 shadow-sm" style="min-width: 250px;">
-                    <img src="/images/course4.jpg" class="card-img-top" alt="Course 4">
-                    <div class="card-body">
-                        <h6 class="card-title fw-semibold text-truncate">Capstone: Retrieving, Processing, and Visualizing Data</h6>
-                        <p class="text-muted small mb-2">University of Michigan</p>
-                        <a href="#" class="btn btn-sm btn-outline-primary rounded-pill">View Course</a>
-                    </div>
-                </div> <div class="card me-3 shadow-sm" style="min-width: 250px;">
-                    <img src="/images/course4.jpg" class="card-img-top" alt="Course 4">
-                    <div class="card-body">
-                        <h6 class="card-title fw-semibold text-truncate">Capstone: Retrieving, Processing, and Visualizing Data</h6>
-                        <p class="text-muted small mb-2">University of Michigan</p>
-                        <a href="#" class="btn btn-sm btn-outline-primary rounded-pill">View Course</a>
-                    </div>
-                </div> <div class="card me-3 shadow-sm" style="min-width: 250px;">
-                    <img src="/images/course4.jpg" class="card-img-top" alt="Course 4">
-                    <div class="card-body">
-                        <h6 class="card-title fw-semibold text-truncate">Capstone: Retrieving, Processing, and Visualizing Data</h6>
-                        <p class="text-muted small mb-2">University of Michigan</p>
-                        <a href="#" class="btn btn-sm btn-outline-primary rounded-pill">View Course</a>
-                    </div>
-                </div>
+                }
+
             </div>
         </div>
+
+
     </div>
 </div>
 

@@ -230,7 +230,97 @@ namespace LearningManagementSystem.Controllers
         [HttpGet]
         public IActionResult GetCourseDetails(int id)
         {
-            return View();
+            CourseDetailsByID course = new CourseDetailsByID();
+            course.Skills = new List<Skills>();
+            course.CourseSpecializationList = new List<CourseSpecialization>();
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                SqlCommand cmd = new SqlCommand("lmsGetCourseDetailsById", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ICourseDetailsById", id);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+
+                conn.Open();
+                da.Fill(ds);
+                conn.Close();
+
+                // ------------------------ TABLE 0 : Course Details ------------------------
+                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    DataRow row = ds.Tables[0].Rows[0];
+
+                    course.CourseDetailsId = Convert.ToInt32(row["CourseDetailsId"]);
+                    course.CourseName = row["CourseName"].ToString();
+                    course.CourseProvider = row["CourseProvider"].ToString();
+                    course.IsFree = Convert.ToBoolean(row["IsFree"]);
+                    course.CourseFees = row["CourseFees"] != DBNull.Value
+                        ? Convert.ToDecimal(row["CourseFees"])
+                        : 0;
+                }
+                else
+                {
+                    return null; // no course found
+                }
+
+                // ------------------------ TABLE 1 : Skills ------------------------
+                if (ds.Tables.Count > 1)
+                {
+                    DataTable skillTable = ds.Tables[1];
+
+                    for (int i = 0; i < skillTable.Rows.Count; i++)
+                    {
+                        DataRow row = skillTable.Rows[i];
+                        course.Skills.Add(new Skills
+                        {
+                            SkillId = Convert.ToInt32(row["SkillId"]),
+                            SkillName = row["SkillName"].ToString()
+                        });
+                    }
+                }
+
+                // ------------------------ TABLE 2 : Specializations ------------------------
+                if (ds.Tables.Count > 2)
+                {
+                    DataTable specTable = ds.Tables[2];
+
+                    for (int i = 0; i < specTable.Rows.Count; i++)
+                    {
+                        DataRow row = specTable.Rows[i];
+                        course.CourseSpecializationList.Add(new CourseSpecialization
+                        {
+                            SpecializationId = Convert.ToInt32(row["SpecializationId"]),
+                            Specialization = row["Specialization"].ToString()
+                        });
+                    }
+                }
+
+                // ------------------------ TABLE 3 : Related course list ------------------------
+                if (ds.Tables.Count > 3)
+                {
+                    DataTable relatedTable = ds.Tables[3];
+                    List<RelatedCourses> related = new List<RelatedCourses>();
+                    for (int i = 0; i < relatedTable.Rows.Count; i++)
+                    {
+                        RelatedCourses rtl = new RelatedCourses();
+                        DataRow row = relatedTable.Rows[i];
+
+                        //course.RelatedCourses.Add(new RelatedCourses
+                        //{
+                        rtl.CourseDetailsId = Convert.ToInt32(row["CourseDetailsId"]);
+                        rtl.CourseName = row["CourseName"].ToString();
+                        rtl.CourseImage = row["CourseImage"].ToString();
+                        rtl.CourseProvider = row["CourseProvider"].ToString();
+                        //});
+
+                        related.Add(rtl);
+                    }
+                    course.RelatedCourses = related;
+                }
+            }
+            return View(course);
         }
 
         [HttpPost]
