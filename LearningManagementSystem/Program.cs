@@ -19,7 +19,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Identity/Account/Login"; // default path
-    options.ExpireTimeSpan = TimeSpan.FromSeconds(60);
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
     options.SlidingExpiration = true;
 });
 builder.Services.AddSession(options =>

@@ -34,21 +34,12 @@ namespace LearningManagementSystem.Models
 
     public class UserEducationDetails
     {
-        //public bool? IsSchool { get; set; }
-        //public int? Class { get; set; }
-        //public bool? IsCollege { get; set; }
-        //public string? NameOfSchool { get; set; }
-        //public string? NameOfCollge { get; set; }
-       //public decimal? CGPA { get; set; }
-        //public int? Percentage { get; set; }
-        public string Degree { get; set; }
-        public string NameOftheInstitution { get; set; }
+        public string? Degree { get; set; }
+        public string? NameOftheInstitution { get; set; }
+        public string? StartDate { get; set; }
         public string? PassoutYear { get; set; }
+        public bool? IsPursuing { get; set; }
         public bool? IsYearGap { get; set; }
-        //public DateTime? CreatedOn { get; set; }
-        //public string? CreatedBy { get; set; }
-        //public DateTime? ModifiedOn { get; set; }
-        //public string? ModifiedBy { get; set; }
     }
 
     public class UserCourses
@@ -73,19 +64,11 @@ namespace LearningManagementSystem.Models
         public DateTime? ModifiedOn { get; set; }
     }
 
-
-    #region POULAMI
-
-
-
-
+    public class UserProfileSaveRequest
+    {
+        public UserProfile userProfile { get; set; }
+    }
 
 
-
-
-
-
-
-
-    #endregion
+    
 }

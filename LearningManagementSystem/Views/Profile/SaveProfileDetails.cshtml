@@ -1,157 +1,83 @@
 ﻿<!-- Profile Update Form Start -->
 <div class="container-fluid" data-wow-delay="0.1s">
     <div class="container py-5">
-        <form>
+        <form method="post" asp-controller="Profile" asp-action="SaveProfileData">
+            <!-- Added method and action for submission -->
             <div class="row g-3">
                 <!-- Section: Profile Information -->
                 <h5 class="mb-3">Profile Information</h5>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="name" placeholder="Name">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
                         <label for="name">Name</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="contact" placeholder="Contact">
+                        <input type="tel" class="form-control" id="contact" name="contact" placeholder="Contact" required>
                         <label for="contact">Contact</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="email" class="form-control" id="email" placeholder="Email">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
                         <label for="email">Email</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="number" class="form-control" id="age" placeholder="Age">
+                        <input type="number" class="form-control" id="age" name="age" placeholder="Age" min="18" max="100" required>
                         <label for="age">Age</label>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-floating">
-                        <textarea class="form-control" placeholder="About" id="about"
-                                  style="height: 100px"></textarea>
+                        <textarea class="form-control" placeholder="About" id="about" name="about" style="height: 100px" required></textarea>
                         <label for="about">About</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="country" placeholder="Country">
+                        <input type="text" class="form-control" id="country" name="country" placeholder="Country" required>
                         <label for="country">Country</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="state" placeholder="State">
+                        <input type="text" class="form-control" id="state" name="state" placeholder="State" required>
                         <label for="state">State</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="pincode" placeholder="Pin Code">
+                        <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Pin Code" pattern="[0-9]{6}" required>
                         <label for="pincode">Pin Code</label>
                     </div>
                 </div>
 
-
                 <!-- Section: Educational Background -->
                 <div class="col-12">
-                    <button class="btn btn-outline-primary py-2 px-4" type="button">+ Add</button>
+                    <button type="button" class="btn btn-outline-primary py-2 px-4" onclick="addEducation()">+ Add Education</button>
                 </div>
                 <h5 class="mt-4 mb-3">Educational Background</h5>
                 <div id="education-container">
-                    <div class="education-block row g-3 mb-3 border rounded p-3">
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" name="Degree" placeholder="Degree">
-                                <label>Degree</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" name="CollegeName"
-                                       placeholder="College Name">
-                                <label>College Name</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="date" class="form-control" name="StartDate" placeholder="Start Date">
-                                <label>Start Date</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="date" class="form-control" name="EndDate" placeholder="End Date">
-                                <label>End Date</label>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" name="CurrentlyPursuing">
-                                <label class="form-check-label">Currently Pursuing</label>
-                            </div>
-                        </div>
-                        <div class="col-12 text-end">
-                            <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                        </div>
-                    </div>
+                    <!-- Dynamic education blocks will be added here -->
                 </div>
 
-
-
-                <!-- Section: Educational Background -->
+                <!-- Section: Professional Experience -->
                 <div class="col-12">
-                    <button class="btn btn-outline-primary py-2 px-4" type="button">+ Add</button>
+                    <button type="button" class="btn btn-outline-primary py-2 px-4" onclick="addExperience()">+ Add Experience</button>
                 </div>
                 <h5 class="mt-4 mb-3">Professional Experience</h5>
                 <div id="experience-container">
-                    <div class="education-block row g-3 mb-3 border rounded p-3">
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" name="Organization"
-                                       placeholder="Enter organization name">
-                                <label>Organization</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" name="Designation"
-                                       placeholder="Enter your designation">
-                                <label>Your Designation</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="date" class="form-control" name="doj" placeholder="DD/MM/YYYY">
-                                <label>Date Of Joining</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="date" class="form-control" name="dor" placeholder="DD/MM/YYYY">
-                                <label>Last Working Date</label>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" name="CurrentlyWorking">
-                                <label class="form-check-label">Currently Working</label>
-                            </div>
-                        </div>
-                        <div class="col-12 text-end">
-                            <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                        </div>
-                    </div>
+                    <!-- Dynamic experience blocks will be added here -->
                 </div>
 
                 <!-- Section: Interests and Hobbies -->
-                <h5 class="mt-4 mb-3">Interests and Hobbies</h5>
+                <!--<h5 class="mt-4 mb-3">Interests and Hobbies</h5>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <select class="form-select" id="interest">
+                        <select class="form-select" id="interest" name="interest" required>
                             <option selected disabled>Choose...</option>
                             <option value="AI">AI</option>
                             <option value="Web Development">Web Development</option>
@@ -162,22 +88,134 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <select class="form-select" id="hobbies">
-                            <option selected disabled>Choose...</option>
+                        <select class="form-select" id="hobbies" name="hobbies[]" multiple required>-->
+                            <!-- Multiple for hobbies -->
+                            <!--<option selected>Choose...</option>
                             <option value="Reading">Reading</option>
                             <option value="Gaming">Gaming</option>
                             <option value="Traveling">Traveling</option>
                         </select>
                         <label for="hobbies">Hobbies</label>
                     </div>
-                </div>
+                </div>-->
 
                 <!-- Action Buttons -->
                 <div class="col-12 d-flex justify-content-between mt-4">
                     <button class="btn btn-outline-secondary px-4 py-2" type="reset">Cancel</button>
                     <button class="btn btn-primary px-4 py-2" type="submit">Save Changes</button>
                 </div>
+
+                <input type="hidden" id="educationCount" name="educationCount" value="0" />
+                <input type="hidden" id="experienceCount" name="experienceCount" value="0" />
+
             </div>
         </form>
     </div>
 </div>
+
+@section scripts{
+    <script>
+        let educationCount = 0;
+        let experienceCount = 0;
+
+        function updateHiddenCounters() {
+            document.getElementById('educationCount').value = educationCount;
+            document.getElementById('experienceCount').value = experienceCount;
+        }
+
+        function addEducation() {
+            educationCount++;
+            const container = document.getElementById('education-container');
+            const block = document.createElement('div');
+            block.className = 'education-block row g-3 mb-3 border rounded p-3';
+            block.innerHTML = `
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="degree_${educationCount}" placeholder="Degree" required>
+                        <label>Degree</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="college_${educationCount}" placeholder="College Name" required>
+                        <label>College Name</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="date" class="form-control" name="start_date_${educationCount}" placeholder="Start Date" required>
+                        <label>Start Date</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="date" class="form-control" name="end_date_${educationCount}" placeholder="End Date" required>
+                        <label>End Date</label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" name="currently_pursuing_${educationCount}" id="pursuing_${educationCount}" value="true">
+                        <label class="form-check-label" for="pursuing_${educationCount}">Currently Pursuing</label>
+                    </div>
+                </div>
+                <div class="col-12 text-end">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.education-block').remove()">Delete</button>
+                </div>
+            `;
+            container.appendChild(block);
+            updateHiddenCounters();
+        }
+
+        function addExperience() {
+            experienceCount++;
+            const container = document.getElementById('experience-container');
+            const block = document.createElement('div');
+            block.className = 'education-block row g-3 mb-3 border rounded p-3';
+            block.innerHTML = `
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="organization_${experienceCount}" placeholder="Enter organization name" required>
+                        <label>Organization</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="designation_${experienceCount}" placeholder="Enter your designation" required>
+                        <label>Your Designation</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="date" class="form-control" name="doj_${experienceCount}" placeholder="DD/MM/YYYY" required>
+                        <label>Date Of Joining</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="date" class="form-control" name="dor_${experienceCount}" placeholder="DD/MM/YYYY" required>
+                        <label>Last Working Date</label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" name="currently_working_${experienceCount}" id="working_${experienceCount}">
+                        <label class="form-check-label" for="working_${experienceCount}">Currently Working</label>
+                    </div>
+                </div>
+                <div class="col-12 text-end">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.education-block').remove()">Delete</button>
+                </div>
+            `;
+            container.appendChild(block);
+            updateHiddenCounters();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            addEducation();
+            addExperience();
+        });
+    </script>
+
+}
+
