@@ -1,0 +1,83 @@
+﻿@model List<LearningManagementSystem.Models.CourseInfo>
+
+@{
+    // pagination metadata (provided by controller)
+    var total = ViewBag.TotalCount ?? (ViewBag.CourseList != null ? ((List<LearningManagementSystem.Models.CourseInfo>)ViewBag.CourseList).Count : 0);
+    var pageSize = ViewBag.PageSize ?? 6;
+    var currentPage = ViewBag.CurrentPage ?? 1;
+    int totalCount = Convert.ToInt32(total);
+    int page = Convert.ToInt32(currentPage);
+    int pSize = Convert.ToInt32(pageSize);
+    int totalPages = (int)Math.Ceiling((double)totalCount / pSize);
+}
+
+<div class="row g-4 justify-content-center">
+    @if (Model != null && Model.Any())
+    {
+        foreach (var course in Model)
+        {
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="course-item bg-light">
+                    <div class="position-relative overflow-hidden">
+                        <img class="img-fluid" src="@course.CourseImage" alt="@course.CourseName">
+                        <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                            <a class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
+                               style="border-radius: 30px 0 0 30px;"
+                               asp-controller="CourseList" asp-action="GetCourseDetails" asp-route-id="@course.CourseDetailsId">
+                                Read More
+                            </a>
+                            <a href="#" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                               style="border-radius: 0 30px 30px 0;">
+                                Join Now
+                            </a>
+                        </div>
+                    </div>
+                    <div class="text-center p-4 pb-0">
+                        <h3 class="mb-0">$@course.CourseFees</h3>
+                        <h5 class="mb-4">@course.CourseName</h5>
+                    </div>
+                    <div class="d-flex border-top">
+                        <small class="flex-fill text-center border-end py-2">
+                            <i class="fa fa-user-tie text-primary me-2"></i>@course.CourseProvider
+                        </small>
+                        <small class="flex-fill text-center border-end py-2">
+                            <i class="fa fa-clock text-primary me-2"></i>@course.Duration Hrs
+                        </small>
+                        <small class="flex-fill text-center py-2">
+                            <i class="fa fa-user text-primary me-2"></i>@course.NoOfEnrollment Students
+                        </small>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="text-center text-muted py-5">
+            <i class="fa fa-info-circle me-2"></i>No courses found matching your filters.
+        </div>
+    }
+</div>
+
+<!-- PAGINATION (rendered by controller metadata, but the main index still draws pagination) -->
+@if (totalPages > 1)
+{
+    <nav aria-label="Courses pagination" class="mt-4">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(page == 1 ? "disabled" : "")">
+                <a class="page-link" href="#" onclick="loadPage(@(page - 1)); return false;">Prev</a>
+            </li>
+
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == page ? "active" : "")">
+                    <a class="page-link" href="#" onclick="loadPage(@i); return false;">@i</a>
+                </li>
+            }
+
+            <li class="page-item @(page == totalPages ? "disabled" : "")">
+                <a class="page-link" href="#" onclick="loadPage(@(page + 1)); return false;">Next</a>
+            </li>
+        </ul>
+    </nav>
+}
