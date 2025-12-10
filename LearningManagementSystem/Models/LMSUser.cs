@@ -56,6 +56,7 @@ namespace LearningManagementSystem.Models
         public string CourseName { get; set; }
         public DateTime EnrollOn { get; set; }
         public string CourseStatus { get; set; }
+        public string CourseImage { get; set; }
         public decimal CourseFees { get; set; }
         public string CompletionPercentage { get; set; }
 

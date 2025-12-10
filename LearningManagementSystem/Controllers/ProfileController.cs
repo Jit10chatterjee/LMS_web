@@ -59,13 +59,15 @@ namespace LearningManagementSystem.Controllers
                         {
                             userProfile.UserId = Convert.ToInt32(ds.Tables[0].Rows[0]["UserId"]);
                             userProfile.UserName = (ds.Tables[0].Rows[0]["FullName"]).ToString() ?? "";
-                            userProfile.Email = (ds.Tables[0].Rows[0]["Email"]).ToString() ?? "";
+                            userProfile.Country = (ds.Tables[0].Rows[0]["Country"]).ToString() ?? "";
+                            userProfile.Contact = (ds.Tables[0].Rows[0]["Contact"]).ToString() ?? "";
+                            userProfile.About = (ds.Tables[0].Rows[0]["About"]).ToString() ?? "";
                             userProfile.ModifiedOn = Convert.ToDateTime(ds.Tables[0].Rows[0]["ModifiedOn"]);
                         }
                         if (ds.Tables[1].Rows.Count > 0)
                         {
                             List<UserEducationDetails> userEducationDetails = new List<UserEducationDetails>();
-                            for (int i = 1; i < ds.Tables[1].Rows.Count; i++)
+                            for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
                             {
                                 UserEducationDetails Edetails = new UserEducationDetails();
                                 Edetails.Degree = (ds.Tables[1].Rows[i]["Degree"]).ToString() ?? "";
@@ -79,11 +81,12 @@ namespace LearningManagementSystem.Controllers
                         if (ds.Tables[2].Rows.Count > 0)
                         {
                             List<UserCourses> userCourseList = new List<UserCourses>();
-                            for (int i = 1; i < ds.Tables[2].Rows.Count; i++)
+                            for (int i = 0; i < ds.Tables[2].Rows.Count; i++)
                             {
                                 UserCourses course = new UserCourses();
                                 course.CourseDetailsId = Convert.ToInt32(ds.Tables[2].Rows[i]["CourseDetailsId"]);
                                 course.CourseName = (ds.Tables[2].Rows[i]["CourseName"]).ToString() ?? "";
+                                course.CourseImage = (ds.Tables[2].Rows[i]["CourseImage"]).ToString() ?? "";
                                 course.CourseFees = Convert.ToDecimal(ds.Tables[2].Rows[i]["CourseFees"]);
                                 course.EnrollOn = Convert.ToDateTime(ds.Tables[2].Rows[i]["EnrollOn"]);
                                 course.CompletionPercentage = (ds.Tables[2].Rows[i]["CompletionPercentage"]).ToString() ?? "";
@@ -95,7 +98,7 @@ namespace LearningManagementSystem.Controllers
                         if (ds.Tables[3].Rows.Count > 0)
                         {
                             List<UserExperience> userExperienceList = new List<UserExperience>();
-                            for (int i = 1; i < ds.Tables[3].Rows.Count; i++)
+                            for (int i = 0; i < ds.Tables[3].Rows.Count; i++)
                             {
                                 UserExperience exp = new UserExperience();
                                 exp.CompanyName = (ds.Tables[3].Rows[i]["CompanyName"]).ToString() ?? "";
@@ -267,7 +270,7 @@ namespace LearningManagementSystem.Controllers
                 int userId = 0;
                 var userIdFromSession = HttpContext.Session.GetInt32("UserId");
                 if (!userIdFromSession.HasValue)
-                    return RedirectToAction("Index");
+                    return RedirectToAction("GetProfile");
 
                 userId = userIdFromSession.Value;
 
@@ -423,7 +426,7 @@ namespace LearningManagementSystem.Controllers
                         }
                         catch (Exception ex)
                         {
-                            try { transaction.Rollback(); } catch { /* log */ }
+                            transaction.Rollback();
                             _logger.LogError(ex, "Error while saving profile data");
                             TempData["ErrorMessage"] = "Oops! Something went wrong while saving your profile.";
                             return RedirectToAction("Index");
