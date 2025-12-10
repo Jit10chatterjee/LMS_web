@@ -68,11 +68,13 @@ namespace LearningManagementSystem.Models
 
     public class CourseDetailsByID
     {
+        public string email { get; set; }
         public int CourseDetailsId { get; set; }
         public string CourseName { get; set; }
         public string CourseProvider { get; set; }
         public bool IsFree { get; set; }
         public decimal CourseFees { get; set; }
+        public int Duration { get; set; }
 
         public List<Skills> Skills { get; set; }
         public List<CourseSpecialization> CourseSpecializationList { get; set; }

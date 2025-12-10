@@ -47,11 +47,12 @@ namespace LearningManagementSystem.Models
         public int CompletionPercentage { get; set; }
         public string UserNote { get; set; }  // per-user note text
         public bool IsChecked { get; set; }   // per-user checked flag
+        public DateTime? ModifiedOn { get; set; }
     }
 
     public class CourseMediaList
     {
-        public int CourseId { get; set; }
-        public List<CourseVideoDetails> Videos { get; set; } = new List<CourseVideoDetails>();
+        public int CourseDetailsId { get; set; }
+        public List<CourseVideoDetails> Videos { get; set; }
     }
 }

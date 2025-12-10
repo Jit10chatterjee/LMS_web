@@ -19,7 +19,7 @@ namespace LearningManagementSystem.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(int Id = 0)
+        public IActionResult Index(int Id)
         {
             CourseListPageLoad model = new CourseListPageLoad();
             model.courseMasterList = new List<CourseMaster>();
@@ -63,7 +63,7 @@ namespace LearningManagementSystem.Controllers
                 }
 
                 var courseList = GetCoursesByMasterId(Id);
-                ViewBag.CourseList = courseList; 
+                ViewBag.CourseList = courseList;
                 ViewBag.SelectedCategoryId = Id;
             }
             catch (Exception ex)
@@ -206,7 +206,7 @@ namespace LearningManagementSystem.Controllers
             }
         }
 
-        
+
         [HttpPost]
         public IActionResult FilterCourses(
             string courseName,
@@ -217,7 +217,7 @@ namespace LearningManagementSystem.Controllers
             int id = 0
         )
         {
-            
+
             return GetPagedCourses(id: id, page: 1, pageSize: 6,
                 courseName: courseName ?? "",
                 provider: provider ?? "",
@@ -252,9 +252,11 @@ namespace LearningManagementSystem.Controllers
                 {
                     DataRow row = ds.Tables[0].Rows[0];
 
+                    course.email = HttpContext.Session.GetString("Email") ?? "";
                     course.CourseDetailsId = Convert.ToInt32(row["CourseDetailsId"]);
-                    course.CourseName = row["CourseName"].ToString();
-                    course.CourseProvider = row["CourseProvider"].ToString();
+                    course.Duration = Convert.ToInt32(row["Duration"]);
+                    course.CourseName = row["CourseName"].ToString() ?? "";
+                    course.CourseProvider = row["CourseProvider"].ToString() ?? "";
                     course.IsFree = Convert.ToBoolean(row["IsFree"]);
                     course.CourseFees = row["CourseFees"] != DBNull.Value
                         ? Convert.ToDecimal(row["CourseFees"])
@@ -324,18 +326,54 @@ namespace LearningManagementSystem.Controllers
         }
 
         [HttpPost]
-        private Tuple<int,string> courseEnrollment(string email)
+        public Tuple<int, string> courseEnrollment( int courseDetailsId, int isPaid)
         {
-            Tuple<int, string> response = Tuple.Create(-1, "");
+            // default: failure
+            var response = Tuple.Create(0, "Something went wrong. Please try again.");
+            var UserId = HttpContext.Session.GetInt32("UserId");
             try
             {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                using (SqlCommand cmd = new SqlCommand("lmsCourseEnrollMent", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
+                    cmd.Parameters.AddWithValue("@IUserId", UserId);
+                    cmd.Parameters.AddWithValue("@CourseDetailsId", courseDetailsId);
+                    cmd.Parameters.AddWithValue("@IsPaid", isPaid);
+
+                    var ooIdParam = new SqlParameter("@OOId", SqlDbType.BigInt)
+                    {
+                        Direction = ParameterDirection.Output
+                    };
+                    cmd.Parameters.Add(ooIdParam);
+
+                    var oMsgParam = new SqlParameter("@OMsg", SqlDbType.NVarChar, -1)
+                    {
+                        Direction = ParameterDirection.Output
+                    };
+                    cmd.Parameters.Add(oMsgParam);
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+
+                    long newId = 0;
+                    if (ooIdParam.Value != DBNull.Value)
+                        newId = Convert.ToInt64(ooIdParam.Value);
+
+                    string msg = oMsgParam.Value == DBNull.Value ? "Enrollment completed." : oMsgParam.Value.ToString();
+
+                    int status = newId > 0 ? 1 : 0;
+
+                    response = Tuple.Create(status, msg);
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                // log ex
+                response = Tuple.Create(0, "Error during enrollment.");
             }
+
             return response;
         }
     }

@@ -1,113 +1,185 @@
-﻿<!-- Profile Update Form Start -->
+﻿@model UserProfile
+<!-- Profile Update Form Start -->
 <div class="container-fluid" data-wow-delay="0.1s">
     <div class="container py-5">
-        <form method="post" asp-controller="Profile" asp-action="SaveProfileData">
-            <!-- Added method and action for submission -->
+        <form method="post" asp-controller="Profile" asp-action="SaveProfileData" autocomplete="off">
+            @Html.AntiForgeryToken()
             <div class="row g-3">
-                <!-- Section: Profile Information -->
                 <h5 class="mb-3">Profile Information</h5>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Name"
+                               value="@Model.UserName" disabled>
                         <label for="name">Name</label>
+                        <!-- hidden so disabled value posts -->
+                        <input type="hidden" name="name" value="@Model.UserName" />
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="tel" class="form-control" id="contact" name="contact" placeholder="Contact" required>
+                        <input type="tel" class="form-control" id="contact" name="contact" placeholder="Contact"
+                               value="@Model.Contact" disabled>
                         <label for="contact">Contact</label>
+                        <input type="hidden" name="contact" value="@Model.Contact" />
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                               value="@Model.Email" disabled>
                         <label for="email">Email</label>
+                        <input type="hidden" name="email" value="@Model.Email" />
                     </div>
                 </div>
+
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="number" class="form-control" id="age" name="age" placeholder="Age" min="18" max="100" required>
+                        <input type="number" class="form-control" id="age" name="age" placeholder="Age"
+                               min="18" max="100" value="@(Model.Age)">
                         <label for="age">Age</label>
                     </div>
                 </div>
+
                 <div class="col-12">
                     <div class="form-floating">
-                        <textarea class="form-control" placeholder="About" id="about" name="about" style="height: 100px" required></textarea>
+                        <textarea class="form-control" placeholder="About" id="about" name="about" style="height: 100px">@Model.About</textarea>
                         <label for="about">About</label>
                     </div>
                 </div>
+
                 <div class="col-md-4">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="country" name="country" placeholder="Country" required>
+                        <input type="text" class="form-control" id="country" name="country" placeholder="Country" value="@Model.Country">
                         <label for="country">Country</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="state" name="state" placeholder="State" required>
+                        <input type="text" class="form-control" id="state" name="state" placeholder="State" value="@Model.State">
                         <label for="state">State</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Pin Code" pattern="[0-9]{6}" required>
+                        <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Pin Code"
+                               pattern="[0-9]{6}" value="@Model.PinCode">
                         <label for="pincode">Pin Code</label>
                     </div>
                 </div>
 
-                <!-- Section: Educational Background -->
+                <!-- Education -->
                 <div class="col-12">
-                    <button type="button" class="btn btn-outline-primary py-2 px-4" onclick="addEducation()">+ Add Education</button>
+                    <button type="button" class="btn btn-outline-primary py-2 px-4" id="addEducationBtn">+ Add Education</button>
                 </div>
                 <h5 class="mt-4 mb-3">Educational Background</h5>
                 <div id="education-container">
-                    <!-- Dynamic education blocks will be added here -->
+                    @{
+                        var eIndex = 0;
+                        if (Model.EducationDetails != null)
+                        {
+                            foreach (var e in Model.EducationDetails)
+                            {
+                                eIndex++;
+                                <div class="education-block row g-3 mb-3 border rounded p-3">
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" name="degree_@eIndex" placeholder="Degree" value="@e.Degree">
+                                            <label>Degree</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" name="college_@eIndex" placeholder="College Name" value="@e.NameOftheInstitution">
+                                            <label>College Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="date" class="form-control" name="start_date_@eIndex" value="@e.StartDate">
+                                            <label>Start Date</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="date" class="form-control" name="end_date_@eIndex" value="@(e.PassoutYear != null ? e.PassoutYear + "-01-01" : "")">
+                                            <label>End Date</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" name="currently_pursuing_@eIndex" id="pursuing_@eIndex" @(e.IsPursuing)>
+                                            <label class="form-check-label" for="pursuing_@eIndex">Currently Pursuing</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 text-end">
+                                        <button type="button" class="btn btn-danger btn-sm remove-block">Delete</button>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
                 </div>
 
-                <!-- Section: Professional Experience -->
+                <!-- Experience -->
                 <div class="col-12">
-                    <button type="button" class="btn btn-outline-primary py-2 px-4" onclick="addExperience()">+ Add Experience</button>
+                    <button type="button" class="btn btn-outline-primary py-2 px-4" id="addExperienceBtn">+ Add Experience</button>
                 </div>
                 <h5 class="mt-4 mb-3">Professional Experience</h5>
                 <div id="experience-container">
-                    <!-- Dynamic experience blocks will be added here -->
+                    @{
+                        var exIndex = 0;
+                        if (Model.UserExperience != null)
+                        {
+                            foreach (var ex in Model.UserExperience)
+                            {
+                                exIndex++;
+                                <div class="experience-block row g-3 mb-3 border rounded p-3">
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" name="organization_@exIndex" placeholder="Organization" value="@ex.CompanyName">
+                                            <label>Organization</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" name="designation_@exIndex" placeholder="Designation" value="@ex.Designation">
+                                            <label>Designation</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="date" class="form-control" name="doj_@exIndex" value="@(ex.DateOfJoing == default ? "" : ex.DateOfJoing.ToString("yyyy-MM-dd"))">
+                                            <label>Date Of Joining</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="date" class="form-control" name="dor_@exIndex" value="@(ex.LastWorkingDay == default ? "" : ex.LastWorkingDay.ToString("yyyy-MM-dd"))">
+                                            <label>Last Working Date</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" name="currently_working_@exIndex" id="working_@exIndex" @(ex.IsCurrentCompany ? "checked" : "")>
+                                            <label class="form-check-label" for="working_@exIndex">Currently Working</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 text-end">
+                                        <button type="button" class="btn btn-danger btn-sm remove-block">Delete</button>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
                 </div>
 
-                <!-- Section: Interests and Hobbies -->
-                <!--<h5 class="mt-4 mb-3">Interests and Hobbies</h5>
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <select class="form-select" id="interest" name="interest" required>
-                            <option selected disabled>Choose...</option>
-                            <option value="AI">AI</option>
-                            <option value="Web Development">Web Development</option>
-                            <option value="Data Science">Data Science</option>
-                        </select>
-                        <label for="interest">Area of Interest</label>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <select class="form-select" id="hobbies" name="hobbies[]" multiple required>-->
-                            <!-- Multiple for hobbies -->
-                            <!--<option selected>Choose...</option>
-                            <option value="Reading">Reading</option>
-                            <option value="Gaming">Gaming</option>
-                            <option value="Traveling">Traveling</option>
-                        </select>
-                        <label for="hobbies">Hobbies</label>
-                    </div>
-                </div>-->
-
-                <!-- Action Buttons -->
                 <div class="col-12 d-flex justify-content-between mt-4">
                     <button class="btn btn-outline-secondary px-4 py-2" type="reset">Cancel</button>
                     <button class="btn btn-primary px-4 py-2" type="submit">Save Changes</button>
                 </div>
 
-                <input type="hidden" id="educationCount" name="educationCount" value="0" />
-                <input type="hidden" id="experienceCount" name="experienceCount" value="0" />
-
+                <input type="hidden" id="educationCount" name="educationCount" value="@((Model.EducationDetails != null) ? Model.EducationDetails.Count : 0)" />
+                <input type="hidden" id="experienceCount" name="experienceCount" value="@((Model.UserExperience != null) ? Model.UserExperience.Count : 0)" />
             </div>
         </form>
     </div>
@@ -115,15 +187,16 @@
 
 @section scripts{
     <script>
-        let educationCount = 0;
-        let experienceCount = 0;
+        // initialize counts from hidden fields
+        let educationCount = parseInt(document.getElementById('educationCount').value || '0');
+        let experienceCount = parseInt(document.getElementById('experienceCount').value || '0');
 
         function updateHiddenCounters() {
             document.getElementById('educationCount').value = educationCount;
             document.getElementById('experienceCount').value = experienceCount;
         }
 
-        function addEducation() {
+        function addEducationBlock(prefill = null) {
             educationCount++;
             const container = document.getElementById('education-container');
             const block = document.createElement('div');
@@ -131,91 +204,106 @@
             block.innerHTML = `
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="text" class="form-control" name="degree_${educationCount}" placeholder="Degree" required>
+                        <input type="text" class="form-control" name="degree_${educationCount}" placeholder="Degree" value="${prefill?.degree ?? ''}">
                         <label>Degree</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="text" class="form-control" name="college_${educationCount}" placeholder="College Name" required>
+                        <input type="text" class="form-control" name="college_${educationCount}" placeholder="College Name" value="${prefill?.college ?? ''}">
                         <label>College Name</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="date" class="form-control" name="start_date_${educationCount}" placeholder="Start Date" required>
-                        <label>Start Date</label>
+                        <input type="date" class="form-control" name="start_date_${educationCount}" value="${prefill?.percentage ?? ''}">
+                        <label>Percentage</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="date" class="form-control" name="end_date_${educationCount}" placeholder="End Date" required>
+                        <input type="date" class="form-control" name="end_date_${educationCount}" value="${prefill?.end ?? ''}">
                         <label>End Date</label>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" name="currently_pursuing_${educationCount}" id="pursuing_${educationCount}" value="true">
+                        <input class="form-check-input" type="checkbox" name="currently_pursuing_${educationCount}" id="pursuing_${educationCount}" ${prefill?.pursuing ? 'checked' : ''}>
                         <label class="form-check-label" for="pursuing_${educationCount}">Currently Pursuing</label>
                     </div>
                 </div>
                 <div class="col-12 text-end">
-                    <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.education-block').remove()">Delete</button>
+                    <button type="button" class="btn btn-danger btn-sm remove-block">Delete</button>
                 </div>
             `;
             container.appendChild(block);
             updateHiddenCounters();
         }
 
-        function addExperience() {
+        function addExperienceBlock(prefill = null) {
             experienceCount++;
             const container = document.getElementById('experience-container');
             const block = document.createElement('div');
-            block.className = 'education-block row g-3 mb-3 border rounded p-3';
+            block.className = 'experience-block row g-3 mb-3 border rounded p-3';
             block.innerHTML = `
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="text" class="form-control" name="organization_${experienceCount}" placeholder="Enter organization name" required>
+                        <input type="text" class="form-control" name="organization_${experienceCount}" placeholder="Organization" value="${prefill?.org ?? ''}">
                         <label>Organization</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="text" class="form-control" name="designation_${experienceCount}" placeholder="Enter your designation" required>
-                        <label>Your Designation</label>
+                        <input type="text" class="form-control" name="designation_${experienceCount}" placeholder="Designation" value="${prefill?.designation ?? ''}">
+                        <label>Designation</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="date" class="form-control" name="doj_${experienceCount}" placeholder="DD/MM/YYYY" required>
+                        <input type="date" class="form-control" name="doj_${experienceCount}" value="${prefill?.doj ?? ''}">
                         <label>Date Of Joining</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input type="date" class="form-control" name="dor_${experienceCount}" placeholder="DD/MM/YYYY" required>
+                        <input type="date" class="form-control" name="dor_${experienceCount}" value="${prefill?.dor ?? ''}">
                         <label>Last Working Date</label>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" name="currently_working_${experienceCount}" id="working_${experienceCount}">
+                        <input class="form-check-input" type="checkbox" name="currently_working_${experienceCount}" id="working_${experienceCount}" ${prefill?.working ? 'checked' : ''}>
                         <label class="form-check-label" for="working_${experienceCount}">Currently Working</label>
                     </div>
                 </div>
                 <div class="col-12 text-end">
-                    <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.education-block').remove()">Delete</button>
+                    <button type="button" class="btn btn-danger btn-sm remove-block">Delete</button>
                 </div>
             `;
             container.appendChild(block);
             updateHiddenCounters();
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            addEducation();
-            addExperience();
+        // event delegations
+        document.addEventListener('click', function (e) {
+            if (e.target && e.target.id === 'addEducationBtn') {
+                addEducationBlock();
+            } else if (e.target && e.target.id === 'addExperienceBtn') {
+                addExperienceBlock();
+            } else if (e.target && e.target.classList.contains('remove-block')) {
+                const block = e.target.closest('.education-block, .experience-block');
+                if (block) {
+                    block.remove();
+                    // note: we don't decrement count because indices used for names must be unique.
+                    // recompute counts by counting current blocks:
+                    educationCount = document.querySelectorAll('#education-container .education-block').length;
+                    experienceCount = document.querySelectorAll('#experience-container .experience-block').length;
+                    updateHiddenCounters();
+                }
+            }
         });
+
+        // initial counters already set from server; update hidden counters to ensure accuracy
+        updateHiddenCounters();
     </script>
-
 }
-

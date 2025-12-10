@@ -1,95 +1,91 @@
 ﻿using LearningManagementSystem.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace LearningManagementSystem.Controllers
 {
     public class VideoController : Controller
     {
+        private readonly string _connectionString;
+        private readonly ILogger<CourseListController> _logger;
+
+        public VideoController(IConfiguration configuration, ILogger<CourseListController> logger)
+        {
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _logger = logger;
+        }     
+
+
         public IActionResult Index()
         {
             return View();
         }
 
-        //public IActionResult CoursePlayer()
-        //{
-        //    CourseMediaList list = new CourseMediaList();
-
-        //    return View(list);
-        //}
-        public IActionResult CoursePlayer(int courseId = 1)
+        [HttpGet]
+        public IActionResult CoursePlayer(int courseId)
         {
-            // --------- HARD CODED DUMMY DATA (NO DATABASE NEEDED) ----------
-            var dummyMedia = new List<CourseVideoDetails>
+            CourseMediaList courseMediaList = new CourseMediaList();
+            try
             {
-                new CourseVideoDetails
+                DataTable dt = new DataTable();
+                var UserId = HttpContext.Session.GetInt32("UserId");
+                using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
-                    CourseMediaId = 1,
-                    Title = "Introduction to C",
-                    Poster = "https://media.licdn.com/dms/image/v2/D4D12AQEmzusF9C5JfA/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1683178954137?e=2147483647&v=beta&t=nsmAzz64DpJaO7qloxqYXjv4Wgk3dXZdzUw1_KQvyLE",
-                    Source = "https://www.youtube.com/watch?v=EjavYOFoJJ0&list=PLdo5W4Nhv31a8UcMN9-35ghv8qyFWD9_S&index=1",
-                    CompletionPercentage = 10,
-                    IsDisabled = false,   // first video unlocked
-                    IsChecked = false,
-                    UserNote = ""
-                },
+                    conn.Open();
+                    SqlCommand cmd = conn.CreateCommand();
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "lmsGetCourseVideos";
+                    cmd.Parameters.AddWithValue("@ICourseDetailsId", courseId);
+                    cmd.Parameters.AddWithValue("@IUserId", UserId);
 
-                new CourseVideoDetails
-                {
-                    CourseMediaId = 2,
-                    Title = "Features of C",
-                    Poster = "https://media.licdn.com/dms/image/v2/D4D12AQEmzusF9C5JfA/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1683178954137?e=2147483647&v=beta&t=nsmAzz64DpJaO7qloxqYXjv4Wgk3dXZdzUw1_KQvyLE",
-                    Source = "https://www.youtube.com/watch?v=i3SWaOhjPCY&list=PLdo5W4Nhv31a8UcMN9-35ghv8qyFWD9_S&index=4",
-                    CompletionPercentage = 20,
-                    IsDisabled = true,
-                    IsChecked = false,
-                    UserNote = ""
-                },
-
-                new CourseVideoDetails
-                {
-                    CourseMediaId = 3,
-                    Title = "Variables in C",
-                    Poster = "https://media.licdn.com/dms/image/v2/D4D12AQEmzusF9C5JfA/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1683178954137?e=2147483647&v=beta&t=nsmAzz64DpJaO7qloxqYXjv4Wgk3dXZdzUw1_KQvyLE",
-                    Source = "https://www.youtube.com/watch?v=dhh5lrXXXYw&list=PLdo5W4Nhv31a8UcMN9-35ghv8qyFWD9_S&index=8",
-                    CompletionPercentage = 20,
-                    IsDisabled = true,
-                    IsChecked = false,
-                    UserNote = ""
-                },
-
-                new CourseVideoDetails
-                {
-                    CourseMediaId = 4,
-                    Title = "Keywords and Identifiers in C",
-                    Poster = "https://media.licdn.com/dms/image/v2/D4D12AQEmzusF9C5JfA/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1683178954137?e=2147483647&v=beta&t=nsmAzz64DpJaO7qloxqYXjv4Wgk3dXZdzUw1_KQvyLE",
-                    Source = "https://www.youtube.com/watch?v=Ywnv78X7TAg&list=PLdo5W4Nhv31a8UcMN9-35ghv8qyFWD9_S&index=9",
-                    CompletionPercentage = 20,
-                    IsDisabled = true,
-                    IsChecked = false,
-                    UserNote = ""
-                },
-
-                new CourseVideoDetails
-                {
-                    CourseMediaId = 5,
-                    Title = "C Zero to Hero",
-                    Poster = "https://i.ytimg.com/vi/YXcgD8hRHYY/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBs-YBQRPvWj_BXEFTnpyn_Lxpfvg",
-                    Source = "https://www.youtube.com/watch?v=YXcgD8hRHYY",
-                    CompletionPercentage = 30,
-                    IsDisabled = true,
-                    IsChecked = false,
-                    UserNote = ""
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(dt);
                 }
-            };
+                if(dt.Rows.Count > 0)
+                {
+                    List< CourseVideoDetails > videoList = new List< CourseVideoDetails >();
+                    for(int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        CourseVideoDetails vdo = new CourseVideoDetails();
+                        DataRow row = dt.Rows[i];
 
-            // Put dummy videos inside model
-            var model = new CourseMediaList
+                        vdo.CourseMediaId = Convert.ToInt32(row["CourseMediaId"]);   
+                        vdo.Title = row["Title"]?.ToString() ?? "";                
+                        vdo.Poster = row["PosterLink"]?.ToString() ?? "";           
+                        vdo.Source = row["VideoLink"]?.ToString() ?? "";            
+                        if (row["IsCompleted"] == DBNull.Value)
+                        {
+                            vdo.IsChecked = false;
+                        }
+                        else
+                        {
+                            vdo.IsChecked = Convert.ToBoolean(row["IsCompleted"]);
+                        }
+                        vdo.UserNote = row["UserGivenNotes"].ToString() ?? "";
+                        vdo.ModifiedOn = row["ModifiedOn"] == DBNull.Value? (DateTime?)null : Convert.ToDateTime(row["ModifiedOn"]);
+
+                        if(i == 0)
+                        {
+                            vdo.IsDisabled = false;
+                        }
+                        else
+                        {
+                            vdo.IsDisabled = true;
+
+                        }
+
+                        videoList.Add(vdo);
+                    }
+                    courseMediaList.Videos = videoList;
+                }
+            }
+            catch (Exception ex)
             {
-                CourseId = courseId,
-                Videos = dummyMedia
-            };
-
-            return View(model);
+                _logger.LogError(ex, "Oops something went wrong!!");
+                throw;
+            }
+            return View(courseMediaList);
         }
 
     }

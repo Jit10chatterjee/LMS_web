@@ -25,6 +25,12 @@ namespace LearningManagementSystem.Models
         public int UserId { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
+        public string Contact { get; set; }
+        public string Age { get; set; }
+        public string About { get; set; }
+        public string State { get; set; }
+        public int PinCode { get; set; }
+        public string Country { get; set; }
         public List<UserEducationDetails>? EducationDetails { get; set; }
         public List<UserCourses>? UserCourses { get; set; }
         public List<UserExperience>? UserExperience { get; set; }
@@ -40,6 +46,8 @@ namespace LearningManagementSystem.Models
         public string? PassoutYear { get; set; }
         public bool? IsPursuing { get; set; }
         public bool? IsYearGap { get; set; }
+        public decimal Percentage { get; set; }
+        
     }
 
     public class UserCourses
