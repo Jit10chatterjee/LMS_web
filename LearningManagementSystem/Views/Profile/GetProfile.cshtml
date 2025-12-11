@@ -1,5 +1,5 @@
 ﻿@model UserProfile
-@{
+@*@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -9,7 +9,7 @@
     <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
     <link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet" />
     <title>@Model.UserName's Profile</title>
-    <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" />
+    <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" />*@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <style type="text/tailwindcss">
@@ -23,7 +23,7 @@
 /*            background-color: #06BBCC !important;*/
         }
     </style>
-</head>
+@*</head>*@
 <body class="bg-gray-50">
     <div class="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden" style='font-family: Manrope, "Noto Sans", sans-serif;'>
         <div class="layout-container flex h-full grow flex-col">
@@ -57,7 +57,7 @@
                             <h1 class="text-4xl font-bold text-gray-900">Profile</h1>
                         </div>
                         <div>
-                            @if (@Model.EducationDetails.Count > 0)
+                            @if (@Model.EducationDetails?.Count > 0)
                             {
 
                                 @for (int i = 0; i < @Model.EducationDetails.Count; i++)
@@ -70,12 +70,12 @@
                                     <div class="mt-4 grid gap-6">
                                         <div class="flex items-start gap-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
                                             <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-600">
-                                                <span class="material-symbols-outlined text-3xl">@Model.EducationDetails[i].NameOftheInstitution</span>
+                                                @*<span class="material-symbols-outlined text-3xl">@Model.EducationDetails[i].NameOftheInstitution</span>*@
                                             </div>
                                             <div>
-                                                <h4 class="text-lg font-bold text-gray-900">@Model.EducationDetails[i].NameOftheInstitution</h4>
-                                                <p class="mt-1 text-md font-medium text-gray-700">@Model.EducationDetails[i].Degree</p>
-                                                @*<p class="mt-2 text-sm text-gray-500">Graduated: May 2016</p>*@
+                                                <p class="mt-1 text-md font-bold text-gray-700">Degree : @Model.EducationDetails[i].Degree</p>
+                                                <h4 class="text-lg font-bold text-gray-900">Institute : @Model.EducationDetails[i].NameOftheInstitution</h4>
+                                                <p class="mt-2 text-sm text-gray-500">Passout Year : @Model.EducationDetails[i].PassoutYear</p>
                                             </div>
                                         </div>
                                     </div>
@@ -86,7 +86,7 @@
                             }
                         </div>
                         <div>
-                            @if (@Model.UserExperience.Count > 0)
+                            @if (@Model.UserExperience?.Count > 0)
                             {
 
                                 @for (int i = 0; i < @Model.UserExperience.Count; i++)
@@ -115,7 +115,7 @@
                         <div class="mt-8">
 
 
-                                @if (Model.UserCourses.Count > 0)
+                                @if (@Model.UserCourses?.Count > 0)
                                 {
                             <h3 class="text-2xl font-bold text-gray-900">Enrolled Courses</h3>
                             <div class="mt-4 space-y-6">
