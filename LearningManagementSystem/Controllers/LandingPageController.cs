@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 
 namespace LearningManagementSystem.Controllers
 {
+    
     public class LandingPageController : Controller
     {
         private readonly SignInManager<LMSUser> _signInManager;

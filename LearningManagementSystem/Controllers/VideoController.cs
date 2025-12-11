@@ -1,10 +1,12 @@
 ﻿using LearningManagementSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace LearningManagementSystem.Controllers
 {
+    [Authorize]
     public class VideoController : Controller
     {
         private readonly string _connectionString;
