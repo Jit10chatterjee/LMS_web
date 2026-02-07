@@ -1,4 +1,5 @@
-﻿@{
+﻿@model UserProfile
+@*@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -7,8 +8,8 @@
     <meta charset="utf-8" />
     <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
     <link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet" />
-    <title>Stitch Design</title>
-    <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" />
+    <title>@Model.UserName's Profile</title>
+    <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" />*@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <style type="text/tailwindcss">
@@ -22,7 +23,7 @@
 /*            background-color: #06BBCC !important;*/
         }
     </style>
-</head>
+@*</head>*@
 <body class="bg-gray-50">
     <div class="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden" style='font-family: Manrope, "Noto Sans", sans-serif;'>
         <div class="layout-container flex h-full grow flex-col">
@@ -31,20 +32,20 @@
                     <div class="w-full lg:w-80 bg-white p-6 lg:min-h-screen">
                         <div class="flex flex-col items-center text-center">
                             <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-32 w-32 mb-4" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAjUigAW3HSTg3Lgs-2CJhiK_MEdVhONqex__WJECrDkByRs3W9cGxNs-b_zfHSb8tKQJCE0pbixPgoOJEw1Acw0fnjnIXAxOExP_Cu6tCpU6ha50zB101d8ZrWBEh8tFyYcIsHny08QjOhlxAq8BYcwTAU5lze_8ZDHYiCsoDPEuwumEKM6mo3yYlfir6AMKvtXXsDuHmy6XMNOW9zoof5umRPZ8WS0ywDGWWp3N1wU01bTZKhp5Xa1RSxyrLHmmsE-0twOMu_ko4");'></div>
-                            <h2 class="text-2xl font-bold text-gray-900">Sophia Clark</h2>
+                            <h2 class="text-2xl font-bold text-gray-900">@Model.UserName</h2>
                             <div class="mt-2 space-y-1 text-gray-500">
                                 <div class="flex items-center justify-center gap-2">
                                     <span class="material-symbols-outlined text-base">location_on</span>
-                                    <p>San Francisco, CA</p>
+                                    <p>@Model.Country</p>
                                 </div>
                                 <div class="flex items-center justify-center gap-2">
                                     <span class="material-symbols-outlined text-base">call</span>
-                                    <p>(555) 123-4567</p>
+                                    <p>@Model.Contact</p>
                                 </div>
                             </div>
                             <div class="mt-6 text-left">
                                 <h3 class="text-lg font-bold text-gray-900">About</h3>
-                                <p class="mt-2 text-gray-600">Sophia is a dedicated learner with a passion for continuous growth. She enjoys exploring new subjects and applying her knowledge to real-world challenges.</p>
+                                <p class="mt-2 text-gray-600">@Model.About</p>
                             </div>
                         </div>
                     </div>
@@ -56,97 +57,103 @@
                             <h1 class="text-4xl font-bold text-gray-900">Profile</h1>
                         </div>
                         <div>
+                            @if (@Model.EducationDetails?.Count > 0)
+                            {
+
+                                @for (int i = 0; i < @Model.EducationDetails.Count; i++)
+                                {
+
+
+                                @if (Model.EducationDetails[i].Degree != "No Degree Found")
+                                {
                             <h3 class="text-2xl font-bold text-gray-900">Education</h3>
-                            <div class="mt-4 grid gap-6">
-                                <div class="flex items-start gap-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
-                                    <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-600">
-                                        <span class="material-symbols-outlined text-3xl">school</span>
+                                    <div class="mt-4 grid gap-6">
+                                        <div class="flex items-start gap-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
+                                            <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-600">
+                                                @*<span class="material-symbols-outlined text-3xl">@Model.EducationDetails[i].NameOftheInstitution</span>*@
+                                            </div>
+                                            <div>
+                                                <p class="mt-1 text-md font-bold text-gray-700">Degree : @Model.EducationDetails[i].Degree</p>
+                                                <h4 class="text-lg font-bold text-gray-900">Institute : @Model.EducationDetails[i].NameOftheInstitution</h4>
+                                                <p class="mt-2 text-sm text-gray-500">Passout Year : @Model.EducationDetails[i].PassoutYear</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h4 class="text-lg font-bold text-gray-900">University of California, Berkeley</h4>
-                                        <p class="mt-1 text-md font-medium text-gray-700">B.S. in Computer Science</p>
-                                        <p class="mt-2 text-sm text-gray-500">Graduated: May 2016</p>
-                                    </div>
-                                </div>
-                            </div>
+
+                                }
+
+                                }
+                            }
                         </div>
+                        <div>
+                            @if (@Model.UserExperience?.Count > 0)
+                            {
+
+                                @for (int i = 0; i < @Model.UserExperience.Count; i++)
+                                {
+
+                                    @if (Model.UserExperience[i].CompanyName != "")
+                                    {
+                                <h3 class="text-2xl font-bold text-gray-900">Experience</h3>
+
+                                        <div class="mt-4 grid gap-6">
+                                            <div class="flex items-start gap-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
+                                                <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-600">
+                                                    <span class="material-symbols-outlined text-3xl">@Model.UserExperience[i].CompanyName</span>
+                                                </div>
+                                                <div>
+                                                    <h4 class="text-lg font-bold text-gray-900">@Model.UserExperience[i].DateOfJoing</h4>
+                                                    <p class="mt-1 text-md font-medium text-gray-700">@Model.UserExperience[i].IsCurrentCompany</p>
+                                                    @*<p class="mt-2 text-sm text-gray-500">Graduated: May 2016</p>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                  }
+                              }
+                            </div>
                         <div class="mt-8">
+
+
+                                @if (@Model.UserCourses?.Count > 0)
+                                {
                             <h3 class="text-2xl font-bold text-gray-900">Enrolled Courses</h3>
                             <div class="mt-4 space-y-6">
-                                <div class="flex flex-col sm:flex-row items-start gap-6 rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow-lg">
-                                    <div class="h-40 w-full sm:h-32 sm:w-48 flex-shrink-0 bg-cover bg-center rounded-lg" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCOadYJW66kcFgu0_wSW5oXqacvOZ2VadiEV4cHr393GqyOv-qew2GsfB38z2jjsllru3Vf3v60XY25521EaVuQWqZURrZY9JDAEzUjh1twXw67yju7hJcp7uuFqre4dkx5AG7PJeIQQpAT-kIz004jRkuRYNNnMr439nB7lLEvibJRCJ_Y9lVgcQg0n0VzhECv6Bjfb5gvtvlUIrxrWh-5meL4mh0VQYHq3gw9CXHfc378AATwfUVWxcalbb15RjeuUqZsp418C8w");'></div>
-                                    <div class="flex-1 w-full">
-                                        <h4 class="text-lg font-bold text-gray-900">Introduction to Data Science</h4>
-                                        <p class="mt-1 text-gray-600">Learn the basics of data analysis and visualization.</p>
-                                        <div class="mt-4">
-                                            <div class="flex justify-between text-sm font-medium text-gray-500">
-                                                <span>Progress</span>
-                                                <span>75%</span>
+                                    @foreach (var course in Model.UserCourses)
+                                    {
+                                        <div class="flex flex-col sm:flex-row items-start gap-6 rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow-lg">
+                                            <div class="h-40 w-full sm:h-32 sm:w-48 flex-shrink-0 bg-cover bg-center rounded-lg" style='background-image: url("@course.CourseImage");'></div>
+                                            <div class="flex-1 w-full">
+                                                <h4 class="text-lg font-bold text-gray-900">@course.CourseName</h4>
+                                                <p class="mt-1 text-gray-600">@course.CourseStatus</p>
+                                                <div class="mt-4">
+                                                    <div class="flex justify-between text-sm font-medium text-gray-500">
+                                                        <span>Progress</span>
+                                                        <span>@course.CompletionPercentage%</span>
+                                                    </div>
+                                                    <div class="mt-1 h-2 w-full rounded-full bg-gray-200">
+                                                        <div class="h-2 rounded-full bg-[var(--primary-color)]" style="width:@course.CompletionPercentage%"></div>
+                                                    </div>
+                                                </div>
+                                                <a class="mt-3 inline-flex items-center justify-center rounded-md 
+          bg-[var(--primary-color)] 
+          px-3 py-1.5 text-xs font-medium text-white 
+          transition-colors hover:bg-opacity-90"
+                                                        asp-controller="video" asp-action="CoursePlayer" asp-route-courseId="@course.CourseDetailsId">
+                                                    <span>Continue</span>
+                                                    <span class="material-symbols-outlined ml-2 text-base" id="GoToCourse">arrow_forward</span>
+                                                </a>
                                             </div>
-                                            <div class="mt-1 h-2 w-full rounded-full bg-gray-200">
-                                                <div class="h-2 rounded-full bg-[var(--primary-color)]" style="width: 75%"></div>
-                                            </div>
-                                        </div>
-                                        <button class="mt-4 flex items-center justify-center rounded-lg bg-[var(--primary-color)] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-opacity-90">
-                                            <span>Continue</span>
-                                            <span class="material-symbols-outlined ml-2 text-base">arrow_forward</span>
-                                        </button>
-                                    </div>
-                                    <div class="flex flex-col items-end">
-                                        <p class="text-lg font-bold text-gray-900">$299</p>
-                                        <p class="text-sm text-gray-500">Course Fee</p>
-                                    </div>
-                                </div>
-                                <div class="flex flex-col sm:flex-row items-start gap-6 rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow-lg">
-                                    <div class="h-40 w-full sm:h-32 sm:w-48 flex-shrink-0 bg-cover bg-center rounded-lg" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA5MROA9XUn7Zoqa0YsMv4Tu9WoLQmgeRrL4NE1qdt0gW5d7lKVrzLGnoDIro-DtsPs5sfLQG_PmR_q-H1g4lOXXHXSUJVV7eaJKKthbZ2NFsbNvrCOZBE1lcTAflVZxnWzYWK_rZvJZ7tPYeKxw22NzTbnznbx25PynWL93sLaSCQ9mDvzRNNFjRYrLIOJ6eXmHQ31-q_Ipx9pkbOBXOul73Zg7u21kTC2PXSg2k0QZ7IqD0LFEUwVg60zhhGZnEk5ByhRtYxuvXY");'></div>
-                                    <div class="flex-1 w-full">
-                                        <h4 class="text-lg font-bold text-gray-900">Advanced Machine Learning</h4>
-                                        <p class="mt-1 text-gray-600">Dive deep into machine learning algorithms and techniques.</p>
-                                        <div class="mt-4">
-                                            <div class="flex justify-between text-sm font-medium text-gray-500">
-                                                <span>Progress</span>
-                                                <span>40%</span>
-                                            </div>
-                                            <div class="mt-1 h-2 w-full rounded-full bg-gray-200">
-                                                <div class="h-2 rounded-full bg-[var(--primary-color)]" style="width: 40%"></div>
+                                            <div class="flex flex-col items-end">
+                                                <p class="text-lg font-bold text-gray-900">$@course.CourseFees</p>
+                                                <p class="text-sm text-gray-500">Course Fee</p>
                                             </div>
                                         </div>
-                                        <button class="mt-4 flex items-center justify-center rounded-lg bg-[var(--primary-color)] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-opacity-90">
-                                            <span>Continue</span>
-                                            <span class="material-symbols-outlined ml-2 text-base">arrow_forward</span>
-                                        </button>
-                                    </div>
-                                    <div class="flex flex-col items-end">
-                                        <p class="text-lg font-bold text-gray-900">$499</p>
-                                        <p class="text-sm text-gray-500">Course Fee</p>
-                                    </div>
-                                </div>
-                                <div class="flex flex-col sm:flex-row items-start gap-6 rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow-lg">
-                                    <div class="h-40 w-full sm:h-32 sm:w-48 flex-shrink-0 bg-cover bg-center rounded-lg" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCulotC4nPQlJunDOy-OX-aXtYGFmEMXwuN0S3wD0hR41cTACX5ohXLQ1e9CR60xKKHosRcrCYXsPjQLgX3GMCts14zVeWIrtzzWYPeK_XBrRo5ZQ8MC1m0awOXJTOeTU-d4t8DwupCkfQ-RhonwogHDVsBOjNdUMcUxGRFPGrnfWt8ZbfUlf06FKIs2h3Hco4Ye_l1QMrFBrL6peo8RQPVJ9lmU0_zSCcldRayMfqgHiR5EOT_ToFurXWk3o1UqJyefztP7t-oUlI");'></div>
-                                    <div class="flex-1 w-full">
-                                        <h4 class="text-lg font-bold text-gray-900">Cloud Computing Fundamentals</h4>
-                                        <p class="mt-1 text-gray-600">Explore the fundamentals of cloud computing and its applications.</p>
-                                        <div class="mt-4">
-                                            <div class="flex justify-between text-sm font-medium text-gray-500">
-                                                <span>Progress</span>
-                                                <span>15%</span>
-                                            </div>
-                                            <div class="mt-1 h-2 w-full rounded-full bg-gray-200">
-                                                <div class="h-2 rounded-full bg-[var(--primary-color)]" style="width: 15%"></div>
-                                            </div>
-                                        </div>
-                                        <button class="mt-4 flex items-center justify-center rounded-lg bg-[var(--primary-color)] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-opacity-90">
-                                            <span>Continue</span>
-                                            <span class="material-symbols-outlined ml-2 text-base">arrow_forward</span>
-                                        </button>
-                                    </div>
-                                    <div class="flex flex-col items-end">
-                                        <p class="text-lg font-bold text-gray-900">$199</p>
-                                        <p class="text-sm text-gray-500">Course Fee</p>
-                                    </div>
-                                </div>
+                                }
+
+
                             </div>
-                        </div>
+                                    }
                     </div>
                 </div>
             </div>

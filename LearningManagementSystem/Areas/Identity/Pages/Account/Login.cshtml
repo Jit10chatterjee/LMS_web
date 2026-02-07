@@ -20,6 +20,9 @@
         transform: scale(0.85); /* scale down to 85% */
         transform-origin: top center; /* scale from top */
     }
+    .form-outline input:not(:placeholder-shown) + label {
+        transform: translateY(-1rem) scale(0.8);
+    }
 </style>
 <section class="vh-100">
     <div class="container h-100">
@@ -67,7 +70,7 @@
 
                                     @* Submit Button *@
                                     <div class="pt-1 mb-4">
-                                        <button type="submit" class="btn btn-dark btn-lg btn-block">Login</button>
+                                        <button type="submit" class="btn btn-info btn-lg btn-block">Login</button>
                                     </div>
 
                                     <a class="small text-muted" asp-page="./ForgotPassword">Forgot password?</a>
@@ -77,7 +80,6 @@
                                     <a href="#!" class="small text-muted">Terms of use.</a>
                                     <a href="#!" class="small text-muted">Privacy policy</a>
                                 </form>
-
                             </div>
                         </div>
                     </div>

@@ -1,0 +1,432 @@
+﻿@model LearningManagementSystem.Models.CourseMediaList
+@{
+    ViewData["Title"] = "Course Player";
+}
+
+<style>
+    .course-player-wrap {
+        padding: 1rem;
+    }
+
+    .playlist {
+        max-height: 75vh;
+        overflow-y: auto;
+        border-right: 1px solid #e9ecef;
+        padding-right: 0;
+    }
+
+        .playlist .item {
+            padding: .75rem 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f3f5;
+            display: flex;
+            gap: .75rem;
+            align-items: center;
+        }
+
+            .playlist .item.locked {
+                opacity: 0.5;
+            }
+
+            .playlist .item.active {
+                background: #f8fbff;
+            }
+
+    .thumb {
+        width: 56px;
+        height: 40px;
+        background-size: cover;
+        background-position: center;
+        border-radius: 4px;
+        flex-shrink: 0;
+    }
+
+    .play-checkbox {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid #dfe6ea;
+        display: inline-block;
+        margin-right: 8px;
+        position: relative;
+    }
+
+        .play-checkbox.checked {
+            background: #06BBCC;
+            border-color: #06BBCC;
+        }
+
+        .play-checkbox.locked {
+            background: #fff;
+            border-color: #dcdcdc;
+        }
+
+    .player-card {
+        background: white;
+        padding: .75rem;
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .video-el {
+        width: 100%;
+        height: 420px;
+        background: #000;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .note-area {
+        margin-top: 0.75rem;
+    }
+
+    @@media (max-width: 991.98px) {
+        .playlist {
+            max-height: 30vh;
+            border-right: none;
+        }
+
+        .video-el {
+            height: 260px;
+        }
+    }
+</style>
+
+<div class="container-fluid course-player-wrap">
+    <div class="row g-3">
+        <div class="col-md-4 playlist">
+            <div class="mb-3 d-flex justify-content-between align-items-center px-2">
+                <h5 class="m-0">Course Media</h5>
+                <button id="collapsePlaylist" class="btn btn-sm btn-light">Hide</button>
+            </div>
+
+            <div id="mediaList">
+                @if (Model?.Videos != null && Model.Videos.Any())
+                {
+                    int idx = 0;
+                    foreach (var v in Model.Videos)
+                    {
+                        var lockedClass = v.IsDisabled ? "locked" : "";
+                        var activeClass = idx == 0 ? "active" : "";
+                        var cbClass = v.IsChecked ? "checked" : (v.IsDisabled ? "locked" : "");
+                        <div class="item @lockedClass @activeClass" data-index="@idx" data-id="@v.CourseMediaId" data-src="@v.Source" data-locked="@v.IsDisabled.ToString().ToLower()" data-note="@Html.Raw(System.Net.WebUtility.HtmlEncode(v.UserNote))">
+                            <div class="d-flex align-items-center">
+                                <span class="play-checkbox @cbClass" data-checked="@(v.IsChecked.ToString().ToLower())"></span>
+                                <div class="thumb" style="background-image:url('@(v.Poster ?? "/img/default-thumb.png")')"></div>
+                            </div>
+                            <div class="flex-grow-1 ms-2">
+                                <div class="fw-semibold">@v.Title</div>
+                                <div class="small text-muted">Complete @v.CompletionPercentage %</div>
+                            </div>
+                        </div>
+                        idx++;
+                    }
+                }
+                else
+                {
+                    <div class="p-3 text-muted">No media found for this course.</div>
+                }
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="player-card">
+                <div id="videoContainer" class="video-el mb-3">
+                    <video id="mainVideo" controls preload="auto" style="width:100%; height:100%; background:#000;" playsinline></video>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between">
+                    <h4 id="playerTitle" class="m-0">Select a lesson</h4>
+                    <div>
+                        <button id="btnPrev" class="btn btn-outline-secondary btn-sm">Prev</button>
+                        <button id="btnNext" class="btn btn-primary btn-sm btn-next">Next</button>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="note-area">
+                    <label class="form-label">Save note for this video</label>
+                    <textarea id="videoNote" class="form-control" rows="3"></textarea>
+                    <div class="mt-2 d-flex justify-content-end">
+                        <button id="saveNoteBtn" class="btn btn-sm btn-primary">Save note</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        (function ($) {
+
+            const items = $('#mediaList .item');
+            let currentIndex = 0;
+            let minuteTimer = null;
+            const $video = $('#mainVideo');
+
+            // -------------------------------
+            // YOUTUBE URL → EMBED URL
+            // -------------------------------
+            function convertYoutubeToEmbed(url) {
+                try {
+                    // https://www.youtube.com/watch?v=xxxxx
+                    if (url.includes("watch?v=")) {
+                        const id = url.split("watch?v=")[1].split("&")[0];
+                        return `https://www.youtube.com/embed/${id}?autoplay=1`;
+                    }
+
+                    // https://youtu.be/xxxxx
+                    if (url.includes("youtu.be/")) {
+                        const id = url.split("youtu.be/")[1].split(/[?&]/)[0];
+                        return `https://www.youtube.com/embed/${id}?autoplay=1`;
+                    }
+                } catch (err) { }
+
+                return url;
+            }
+
+            // -----------------------------------
+            // LOAD VIDEO BY INDEX
+            // -----------------------------------
+            function loadIndex(index, opts) {
+                opts = opts || {};
+
+                const $item = $(items[index]);
+                if (!$item || $item.length === 0) return;
+
+                // Locked?
+                const locked = ($item.data('locked') == true || $item.data('locked') === 'true');
+                if (locked) {
+                    let allow = true;
+                    for (let i = 0; i < index; i++) {
+                        if (!$(items[i]).find('.play-checkbox').hasClass('checked')) {
+                            allow = false;
+                            break;
+                        }
+                    }
+                    if (!allow) {
+                        alert("Please complete previous lessons first.");
+                        return;
+                    }
+                }
+
+                // Set active item
+                items.removeClass('active');
+                $item.addClass('active');
+
+                const src = $item.data('src');
+                const title = $item.find('.fw-semibold').text().trim();
+                $('#playerTitle').text(title);
+
+                // Remove old iframe always
+                $('#ytframe').remove();
+
+                // Remove old video sources
+                $video.find('source').remove();
+
+                // Check if YouTube link
+                if (src.includes("youtube.com") || src.includes("youtu.be")) {
+
+                    // Hide video tag
+                    $video.hide();
+
+                    const embedUrl = convertYoutubeToEmbed(src);
+
+                    // Insert iframe
+                    const iframeHtml = `
+                        <div id="ytframe" style="width:100%;height:100%;">
+                            <iframe
+                                src="${embedUrl}"
+                                style="width:100%;height:100%;border:0;"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    `;
+
+                    $('#videoContainer').append(iframeHtml);
+
+                    setupOneMinuteLogic(index);
+                }
+                else {
+                    // Normal MP4
+                    $('#ytframe').remove();
+                    $video.show();
+
+                    $video.append(`<source src="${src}" type="video/mp4">`);
+
+                    if (opts.autoplay)
+                        $video.prop("autoplay", true);
+
+                    $video[0].load();
+
+                    if (opts.autoplay)
+                        $video[0].play().catch(() => { });
+
+                    setupOneMinuteLogic(index);
+                }
+
+                // Load notes from data-note
+                const note = $item.attr('data-note') || "";
+                $("#videoNote").val(note);
+            }
+
+            // -----------------------------------------
+            // ONE-MINUTE VALIDATION CHECK
+            // -----------------------------------------
+            function setupOneMinuteLogic(index) {
+                clearInterval(minuteTimer);
+
+                const $item = $(items[index]);
+                const $check = $item.find('.play-checkbox');
+
+                if ($check.hasClass("checked"))
+                    return; // already unlocked
+
+                let elapsed = 0;
+                const targetSeconds = 60;
+
+                minuteTimer = setInterval(() => {
+
+                    let isPlaying = false;
+
+                    // For HTML5 video
+                    const v = $video[0];
+                    if (v && !$video.is(":hidden")) {
+                        isPlaying = (!v.paused && !v.ended && v.readyState > 2);
+                    }
+
+                    // For YouTube iframe (can't detect real play state)
+                    if ($('#ytframe').length > 0) {
+                        isPlaying = true;
+                    }
+
+                    if (isPlaying) {
+                        elapsed++;
+                    }
+
+                    if (elapsed >= targetSeconds) {
+                        clearInterval(minuteTimer);
+
+                        // Unlock UI
+                        $check.addClass("checked")
+                            .removeClass("locked")
+                            .attr("data-checked", "true");
+
+                        // Unlock next item visually
+                        unlockNextItem(index);
+                    }
+
+                }, 1000);
+            }
+
+            function unlockNextItem(index) {
+                const next = index + 1;
+                if (next >= items.length) return;
+
+                const $nextItem = $(items[next]);
+                $nextItem.data('locked', false);
+                $nextItem.removeClass("locked");
+                $nextItem.find('.play-checkbox').removeClass("locked");
+            }
+
+            // ---------------------------
+            // NEXT & PREV BUTTONS
+            // ---------------------------
+            $("#btnNext").on("click", function () {
+                const next = currentIndex + 1;
+
+                if (next >= items.length)
+                    return;
+
+                const $currentCheck = $(items[currentIndex]).find('.play-checkbox');
+
+                if (!$currentCheck.hasClass("checked")) {
+                    alert("Please complete the current video before going next.");
+                    return;
+                }
+
+                currentIndex = next;
+                loadIndex(currentIndex, { autoplay: true });
+            });
+
+            $("#btnPrev").on("click", function () {
+                const prev = currentIndex - 1;
+
+                if (prev < 0)
+                    return;
+
+                currentIndex = prev;
+                loadIndex(currentIndex, { autoplay: true });
+            });
+
+            // -------------------------------------
+            // CLICK ON PLAYLIST ITEM
+            // -------------------------------------
+            $(document).on("click", "#mediaList .item", function () {
+                const targetIndex = parseInt($(this).data("index"));
+
+                const locked = ($(this).data("locked") === true || $(this).data("locked") === "true");
+
+                if (locked) {
+                    let allow = true;
+                    for (let i = 0; i < targetIndex; i++) {
+                        if (!$(items[i]).find('.play-checkbox').hasClass('checked')) {
+                            allow = false;
+                            break;
+                        }
+                    }
+
+                    if (!allow) {
+                        alert("You must complete previous videos first.");
+                        return;
+                    }
+                }
+
+                currentIndex = targetIndex;
+                loadIndex(currentIndex, { autoplay: true });
+            });
+
+            // -----------------------
+            // MANUAL CHECKBOX CLICK
+            // -----------------------
+            $(document).on("click", ".play-checkbox", function (e) {
+
+                const $cb = $(this);
+
+                if ($cb.hasClass("checked"))
+                    return;
+
+                if ($cb.hasClass("locked")) {
+                    alert("Please watch at least 1 minute before checking.");
+                    return;
+                }
+
+                $cb.addClass("checked").attr("data-checked", "true");
+
+                const idx = $(this).closest('.item').data('index');
+                unlockNextItem(idx);
+            });
+
+            // ---------------------------------
+            // SAVE NOTE (Dummy)
+            // ---------------------------------
+            $("#saveNoteBtn").on("click", function () {
+                const note = $("#videoNote").val();
+                $(items[currentIndex]).attr("data-note", note);
+                alert("Note saved (dummy).");
+            });
+
+            // ---------------------------
+            // Initialize
+            // ---------------------------
+            $(function () {
+                if (items.length > 0)
+                    loadIndex(0, { autoplay: true });
+            });
+
+        })(jQuery);
+    </script>
+}
+

@@ -1,0 +1,365 @@
+﻿@* Python Specialization Section *@
+
+@model LearningManagementSystem.Models.CourseDetailsByID
+
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <!-- Header -->
+        <div class="text-center mb-5">
+            <h6 class="section-title bg-white text-primary d-inline-block px-3">Specialization</h6>
+            <h1 class="fw-bold mt-3">@Model.CourseName</h1>
+            <p class="text-muted">
+                Excell your knowledge and ehance your skills with this amazing course
+            </p>
+        </div>
+
+        <!-- Main Section -->
+        <div class="row g-5 align-items-start">
+            <!-- Left Content -->
+            <div class="col-lg-8 col-md-7">
+                <!-- University Info -->
+                <div class="d-flex align-items-center mb-3">
+                    @*<div class="bg-warning text-primary fw-bold fs-4 d-flex align-items-center justify-content-center rounded-circle" style="width:60px; height:60px;">
+                            M
+                        </div>*@
+                    <img src="~/img/webinar.png" style="height:40px; width:auto;" />
+                    <div class="ms-3">
+                        <h6 class="mb-0 text-primary fw-bold">Provided By : @Model.CourseProvider</h6>
+                        <small class="text-muted">Instructor: <strong>Charles Russell Severance</strong></small>
+                    </div>
+                </div>
+
+                <h5 class="fw-bold mb-3">What you'll learn</h5>
+                <p class="text-muted">
+                    This Specialization builds on the success of the Python for Everybody course and introduces fundamental programming concepts including data structures,
+                    networked application program interfaces, and databases using the Python programming language.
+                    In the Capstone Project, you’ll apply these technologies to design and create applications for data retrieval, processing, and visualization.
+                </p>
+
+                <h5 class="fw-bold mt-4 mb-3">Skills you'll gain</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach (var skill in Model.Skills)
+                    {
+                        <span class="badge bg-light text-dark border">@skill.SkillName</span>
+                    }
+                </div>
+
+                <h5 class="fw-bold mt-4 mb-3">Specialization of @Model.CourseName</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach (var skill in Model.CourseSpecializationList)
+                    {
+                        <span class="badge bg-light text-dark border">@skill.Specialization</span>
+                    }
+                </div>
+            </div>
+
+            <!-- Right Info Card -->
+            <div class="col-lg-4 col-md-5">
+                <div class="bg-light border rounded-3 shadow-sm p-4">
+                    <h5 class="fw-bold text-primary mb-3"> Details</h5>
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-2">
+                            <strong>5 course series</strong> <br>
+                            <small class="text-muted">Get in-depth knowledge of a subject</small>
+                        </li>
+                        <li class="mb-2">
+                            <strong>4.8 ★</strong> <br>
+                            <small class="text-muted">Based on 217,000+ reviews</small>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Beginner level</strong> <br>
+                            <small class="text-muted">No prior experience required</small>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Flexible schedule</strong> <br>
+                            <small class="text-muted">2 months at 10 hours/week</small>
+                        </li>
+                        <li>
+                            <strong>Build toward a degree</strong> <br>
+                            <small class="text-muted">Learn more</small>
+                        </li>
+                    </ul>
+
+                    <div class="d-grid">
+                        <button class="btn btn-primary rounded-pill mb-2 enrollBtn" type="button">
+                            Enroll for @(Model.IsFree ? "free" : Model.CourseFees.ToString())
+                        </button>
+                        <input type="hidden" id="IsFree" value="@(Model.IsFree ? "true" : "false")" />
+
+                        <small class="text-muted">Starts Oct 25 — Included with <strong>Coursera Plus</strong></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <style>
+            /* Outer container scroll */
+            .related-scroll {
+                display: flex;
+                overflow-x: auto;
+                gap: 20px;
+                padding-bottom: 10px;
+                scroll-behavior: smooth;
+            }
+
+                /* Hide scrollbar (optional) */
+                .related-scroll::-webkit-scrollbar {
+                    height: 6px;
+                }
+
+                .related-scroll::-webkit-scrollbar-thumb {
+                    background: #ccc;
+                    border-radius: 4px;
+                }
+
+            /* Fixed card size */
+            .related-card {
+                width: 210px;
+                flex: 0 0 auto;
+                height: 330px;
+                border: 1px solid #eee;
+                border-radius: 10px;
+                overflow: hidden;
+                background: white;
+            }
+
+                /* Fixed image size */
+                .related-card img {
+                    height: 140px;
+                    width: 100%;
+                    object-fit: cover;
+                }
+
+                /* Body area aligned */
+                .related-card .card-body {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    height: calc(330px - 140px);
+                    padding: 12px;
+                }
+
+            .card-title {
+                min-height: 38px; /* Keep title lines aligned */
+                font-size: 15px;
+            }
+        </style>
+
+
+        <div class="mt-5">
+            <h4 class="fw-bold mb-3">Related Courses</h4>
+
+            <div class="related-scroll">
+
+                @foreach (var rtl in Model.RelatedCourses)
+                {
+                    <div class="card related-card shadow-sm">
+                        <img src="@rtl.CourseImage" class="card-img-top" alt="Course Image" />
+
+                        <div class="card-body">
+                            <div>
+                                <h6 class="card-title fw-semibold text-truncate">@rtl.CourseName</h6>
+                                <p class="text-muted small mb-2">@rtl.CourseProvider</p>
+                            </div>
+
+                            <a class="btn btn-sm btn-outline-primary rounded-pill mt-auto"
+                               asp-controller="CourseList"
+                               asp-action="GetCourseDetails"
+                               asp-route-id="@rtl.CourseDetailsId">
+                                View Course
+                            </a>
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<!-- Enroll Modal (Bootstrap 5 markup) -->
+<div class="modal fade" id="enrollModal" tabindex="-1" aria-labelledby="enrollModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="enrollModalLabel">Enroll in Specialization</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <p>Are you sure you want to enroll in <strong>@Model.CourseName</strong>?</p>
+
+                <!-- example form or info -->
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" value="@Model.email" disabled>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmEnrollBtn">Confirm Enroll</button>
+            </div>
+            <!-- Yellow Warning Toast -->
+            <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+                <div id="warningToast" class="toast text-bg-warning border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body fw-semibold" id="warningToastBody">
+                            <!-- dynamic message -->
+                        </div>
+                        <button type="button" class="btn-close btn-close-dark me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Yellow Success Toast -->
+            <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+                <div id="SuccessToaster" class="toast text-bg-success border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body fw-semibold" id="SuccessToasterBody">
+                            <!-- dynamic message -->
+                        </div>
+                        <button type="button" class="btn-close btn-close-dark me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Payment Modal -->
+<div class="modal fade" id="enrollPaymentModal" tabindex="-1" aria-labelledby="enrollModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow">
+
+            <!-- Header -->
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="enrollModalLabel">Complete Your Enrollment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body">
+
+                <!-- Course Info -->
+                <div class="border rounded p-3 mb-3 bg-light">
+                    <h6 class="fw-bold mb-1">@Model.CourseName</h6>
+                    <p class="text-muted small mb-0">Duration: @Model.Duration Days • Certificate Included</p>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Email Address</label>
+                    <input type="email" class="form-control" value="@Model.email" disabled>
+                </div>
+
+                <!-- Payment Method -->
+                <label class="form-label fw-semibold mb-2">Select Payment Method</label>
+
+                <div class="d-flex gap-3">
+
+                    <!-- Card -->
+                    <div class="form-check border rounded p-3 flex-fill">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="payCard" checked>
+                        <label class="form-check-label fw-semibold" for="payCard">
+                            💳 Card Payment
+                        </label>
+                        <p class="text-muted small mb-0">Credit / Debit / ATM cards</p>
+                    </div>
+
+                    <!-- UPI -->
+                    <div class="form-check border rounded p-3 flex-fill">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="payUpi">
+                        <label class="form-check-label fw-semibold" for="payUpi">
+                            🔵 UPI
+                        </label>
+                        <p class="text-muted small mb-0">GPay / PhonePe / Paytm</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary px-4" id="confirmEnrollBtn">
+                    Proceed to Payment
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+
+        function isValidEmail(email) {
+            var regex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+            return regex.test(email);
+        }
+
+        let payment = 0;
+
+        $(document).ready(function () {
+            $('.enrollBtn').on('click', function () {
+                debugger
+
+                if ($('#IsFree').val() == "true") {
+                    new bootstrap.Modal(document.getElementById('enrollModal')).show();
+                    payment = 0;
+                } else {
+                    new bootstrap.Modal(document.getElementById('enrollPaymentModal')).show();
+                    payment = 1;
+                }
+            });
+        });
+
+        $(document).on("click", "#confirmEnrollBtn", function () {
+            debugger;
+            let email = $("#enrollPaymentModal input[type='email']").val(); // use correct modal id
+            const url = new URL(window.location.href);
+            const segments = url.pathname.split('/');
+            const id = segments[segments.length - 1];
+
+            if (!isValidEmail(email)) {
+                $("#warningToastBody").text("Please enter a valid email address.");
+                let toast = new bootstrap.Toast($("#warningToast")[0]);
+                toast.show();
+                return;
+            }
+
+            $.ajax({
+                url: "/CourseList/courseEnrollment",
+                type: "POST",
+                data: {
+                    courseDetailsId: id,
+                    isPaid: payment
+                },
+                success: function (res) {
+                    if (res.status === 0) {
+                        $("#warningToastBody").text(res.message);
+                        let toast = new bootstrap.Toast($("#warningToast")[0]);
+                        toast.show();
+                    } else {
+                        $("#SuccessToasterBody").text("Enrollment Successful...!");
+                        let toast = new bootstrap.Toast($("#SuccessToaster")[0]);
+                        toast.show();
+                    }
+                    window.location.href = "/video/CoursePlayer?courseId=" + id;
+                }
+            });
+        });
+
+
+    </script>
+
+}

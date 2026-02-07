@@ -25,6 +25,12 @@ namespace LearningManagementSystem.Models
         public int UserId { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
+        public string Contact { get; set; }
+        public string Age { get; set; }
+        public string About { get; set; }
+        public string State { get; set; }
+        public int PinCode { get; set; }
+        public string Country { get; set; }
         public List<UserEducationDetails>? EducationDetails { get; set; }
         public List<UserCourses>? UserCourses { get; set; }
         public List<UserExperience>? UserExperience { get; set; }
@@ -34,21 +40,14 @@ namespace LearningManagementSystem.Models
 
     public class UserEducationDetails
     {
-        //public bool? IsSchool { get; set; }
-        //public int? Class { get; set; }
-        //public bool? IsCollege { get; set; }
-        //public string? NameOfSchool { get; set; }
-        //public string? NameOfCollge { get; set; }
-       //public decimal? CGPA { get; set; }
-        //public int? Percentage { get; set; }
-        public string Degree { get; set; }
-        public string NameOftheInstitution { get; set; }
+        public string? Degree { get; set; }
+        public string? NameOftheInstitution { get; set; }
+        public string? StartDate { get; set; }
         public string? PassoutYear { get; set; }
+        public bool? IsPursuing { get; set; }
         public bool? IsYearGap { get; set; }
-        //public DateTime? CreatedOn { get; set; }
-        //public string? CreatedBy { get; set; }
-        //public DateTime? ModifiedOn { get; set; }
-        //public string? ModifiedBy { get; set; }
+        public decimal Percentage { get; set; }
+        
     }
 
     public class UserCourses
@@ -57,6 +56,7 @@ namespace LearningManagementSystem.Models
         public string CourseName { get; set; }
         public DateTime EnrollOn { get; set; }
         public string CourseStatus { get; set; }
+        public string CourseImage { get; set; }
         public decimal CourseFees { get; set; }
         public string CompletionPercentage { get; set; }
 
@@ -72,4 +72,12 @@ namespace LearningManagementSystem.Models
         public string? Description { get; set; }
         public DateTime? ModifiedOn { get; set; }
     }
+
+    public class UserProfileSaveRequest
+    {
+        public UserProfile userProfile { get; set; }
+    }
+
+
+    
 }
